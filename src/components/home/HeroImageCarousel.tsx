@@ -1,0 +1,72 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { HERO_SLIDES } from "@/lib/hero-images";
+
+const INTERVAL_MS = 5500;
+const FADE_MS = 1200;
+
+export function HeroImageCarousel() {
+  const [active, setActive] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion || HERO_SLIDES.length <= 1) return;
+
+    const id = window.setInterval(() => {
+      setActive((i) => (i + 1) % HERO_SLIDES.length);
+    }, INTERVAL_MS);
+
+    return () => window.clearInterval(id);
+  }, [reducedMotion]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+      {HERO_SLIDES.map((slide, index) => {
+        const isActive = index === active;
+
+        return (
+          <div
+            key={slide.src}
+            className={[
+              "absolute inset-0 transition-opacity ease-in-out",
+              isActive ? "opacity-100 z-[1]" : "opacity-0 z-0",
+            ].join(" ")}
+            style={{ transitionDuration: `${FADE_MS}ms` }}
+          >
+            <Image
+              src={slide.src}
+              alt=""
+              fill
+              priority={index === 0}
+              className={[
+                "object-cover object-center",
+                isActive && !reducedMotion ? "hero-ken-burns" : "",
+              ].join(" ")}
+              sizes="100vw"
+            />
+          </div>
+        );
+      })}
+
+      {/* Dark overlay — heavier on left for text legibility */}
+      <div
+        className="absolute inset-0 z-[2] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(17,17,17,0.88) 0%, rgba(17,17,17,0.72) 38%, rgba(17,17,17,0.35) 68%, rgba(17,17,17,0.2) 100%)",
+        }}
+      />
+
+    </div>
+  );
+}

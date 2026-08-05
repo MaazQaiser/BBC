@@ -1,0 +1,132 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   BURY BARGAIN CARS — Typography Utilities
+   Semantic type classes that apply the exact spec scale.
+   Always prefer these over ad-hoc text-* classes.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+
+  /* ─── Display — 56/64 ─────────────────────────────────────────────── */
+  .type-display {
+    font-size:      var(--text-display);
+    line-height:    var(--leading-display);
+    font-weight:    var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color:          var(--color-text);
+  }
+
+  /* ─── H1 — 48/56 ─────────────────────────────────────────────────── */
+  .type-h1 {
+    font-size:      var(--text-h1);
+    line-height:    var(--leading-h1);
+    font-weight:    var(--weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color:          var(--color-text);
+  }
+
+  /* ─── H2 — 36/44 ─────────────────────────────────────────────────── */
+  .type-h2 {
+    font-size:      var(--text-h2);
+    line-height:    var(--leading-h2);
+    font-weight:    var(--weight-bold);
+    letter-spacing: var(--tracking-snug);
+    color:          var(--color-text);
+  }
+
+  /* ─── H3 — 28/36 ─────────────────────────────────────────────────── */
+  .type-h3 {
+    font-size:      var(--text-h3);
+    line-height:    var(--leading-h3);
+    font-weight:    var(--weight-semibold);
+    letter-spacing: var(--tracking-snug);
+    color:          var(--color-text);
+  }
+
+  /* ─── H4 — 24/32 ─────────────────────────────────────────────────── */
+  .type-h4 {
+    font-size:      var(--text-h4);
+    line-height:    var(--leading-h4);
+    font-weight:    var(--weight-semibold);
+    letter-spacing: var(--tracking-normal);
+    color:          var(--color-text);
+  }
+
+  /* ─── Large Body — 18/30 ─────────────────────────────────────────── */
+  .type-body-lg {
+    font-size:      var(--text-body-lg);
+    line-height:    var(--leading-body-lg);
+    font-weight:    var(--weight-regular);
+    letter-spacing: var(--tracking-normal);
+    color:          var(--color-text-body);
+  }
+
+  /* ─── Body — 16/28 ───────────────────────────────────────────────── */
+  .type-body {
+    font-size:      var(--text-body);
+    line-height:    var(--leading-body);
+    font-weight:    var(--weight-regular);
+    letter-spacing: var(--tracking-normal);
+    color:          var(--color-text-body);
+  }
+
+  /* ─── Small — 14/24 ──────────────────────────────────────────────── */
+  .type-small {
+    font-size:      var(--text-sm);
+    line-height:    var(--leading-sm);
+    font-weight:    var(--weight-regular);
+    letter-spacing: var(--tracking-normal);
+    color:          var(--color-text-body);
+  }
+
+  /* ─── Caption — 12/18 ────────────────────────────────────────────── */
+  .type-caption {
+    font-size:      var(--text-xs);
+    line-height:    var(--leading-xs);
+    font-weight:    var(--weight-regular);
+    letter-spacing: var(--tracking-normal);
+    color:          var(--color-text-muted);
+  }
+
+  /* ─── Button — 15/20 ─────────────────────────────────────────────── */
+  .type-button {
+    font-size:      var(--text-button);
+    line-height:    var(--leading-button);
+    font-weight:    var(--weight-medium);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  /* ─── Label — uppercase caption for section eyebrows ─────────────── */
+  .type-label {
+    font-size:      var(--text-xs);
+    line-height:    var(--leading-xs);
+    font-weight:    var(--weight-semibold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color:          var(--color-text-muted);
+  }
+
+  /* ─── Section label — compact version of label ───────────────────── */
+  .type-section-label {
+    font-size:      var(--text-xs);
+    line-height:    var(--leading-xs);
+    font-weight:    var(--weight-semibold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color:          var(--color-text-faint);
+  }
+
+  /* ─── Monospace — numbers ONLY ───────────────────────────────────── */
+  .type-mono {
+    font-family:          var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing:       -0.01em;
+  }
+
+  /* Shorthand alias — apply to any numeric span */
+  .num {
+    font-family:          var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing:       -0.01em;
+  }
+
+}
