@@ -59,10 +59,6 @@ export function CategoryCards() {
                     {description}
                   </p>
                 </div>
-
-                <span className="inline-flex self-start items-center justify-center px-[22px] py-[13px] rounded-full bg-[#c2f154] text-[14px] font-bold text-[#111827] group-hover:bg-[#b8dc30] transition-colors duration-[var(--duration-hover)]">
-                  Browse Stock →
-                </span>
               </div>
 
               {/* Car cutout — right */}

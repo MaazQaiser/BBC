@@ -17,7 +17,7 @@ export function SearchHeroSection() {
     <section className="relative bg-[var(--color-dark)]" aria-labelledby="hero-heading">
       <HeroImageCarousel />
 
-      <div className="relative z-10 w-full mx-auto px-[64px]">
+      <div className="relative z-10 w-full mx-auto px-[64px] max-w-[1280px]">
         {/* Hero copy — left-aligned above search card */}
         <div className="max-w-2xl pt-32 pb-48 sm:pt-36 sm:pb-52 lg:pt-40 lg:pb-56">
           <h1
@@ -47,11 +47,9 @@ export function SearchHeroSection() {
           </ul>
         </div>
 
-        {/* Search card — centered, narrower than full bleed */}
-        <div className="absolute bottom-0 left-5 right-5 sm:left-10 sm:right-10 md:left-16 md:right-16 lg:left-[160px] lg:right-[160px] xl:left-[192px] xl:right-[192px] translate-y-1/2 flex justify-center">
-          <div className="w-full max-w-[1040px]">
-            <HomeSearchBar />
-          </div>
+        {/* Search card — full container width, aligned with category cards below */}
+        <div className="absolute bottom-0 left-0 right-0 translate-y-1/2">
+          <HomeSearchBar />
         </div>
       </div>
     </section>
