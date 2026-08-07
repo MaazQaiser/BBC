@@ -40,7 +40,7 @@ const COLLAGE = [
 export function TrustedListingsSection() {
   return (
     <section className="py-16 lg:py-24 bg-[#F5F5F5]" aria-labelledby="trusted-heading">
-      <div className="max-w-[1280px] mx-auto px-[64px]">
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left — copy */}
           <div className="max-w-xl">

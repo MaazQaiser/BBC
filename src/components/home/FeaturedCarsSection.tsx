@@ -92,7 +92,7 @@ export function FeaturedCarsSection({ vehicles }: FeaturedCarsSectionProps) {
 
   return (
     <section className="py-16 lg:py-20 bg-[#F8F8F8]" aria-labelledby="featured-heading">
-      <div className="max-w-[1280px] mx-auto px-[64px]">
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         {/* Header */}
         <div className="flex items-end justify-between gap-6 mb-10">
           <div>

@@ -32,14 +32,14 @@ const CATEGORIES = [
 
 export function CategoryCards() {
   return (
-    <section className="pt-28 sm:pt-32 lg:pt-36 pb-12 bg-white" aria-label="Browse by category">
+    <section className="pt-10 sm:pt-14 lg:pt-36 pb-12 bg-white" aria-label="Browse by category">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {CATEGORIES.map(({ headline, description, href, bg, image, imageClass }) => (
             <Link
               key={headline}
               href={href}
-              className="group relative block h-[244px] rounded-[28px] overflow-hidden transition-shadow duration-[var(--duration-hover)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.08)]"
+              className="group relative block min-h-[200px] md:h-[244px] rounded-[28px] overflow-hidden transition-shadow duration-[var(--duration-hover)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.08)]"
               style={{ backgroundColor: bg }}
             >
               <span
@@ -50,9 +50,9 @@ export function CategoryCards() {
               </span>
 
               {/* Copy — left */}
-              <div className="relative z-10 flex h-full flex-col gap-3 pl-6 pr-8 py-8 max-w-[62%]">
+              <div className="relative z-10 flex h-full flex-col gap-3 pl-5 pr-6 py-6 sm:pl-6 sm:pr-8 sm:py-8 max-w-[72%] sm:max-w-[62%]">
                 <div className="flex flex-col gap-2.5">
-                  <h3 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.5px] text-[#111827]">
+                  <h3 className="text-[22px] sm:text-[26px] font-extrabold leading-[1.15] sm:leading-[30px] tracking-[-0.5px] text-[#111827]">
                     {headline}
                   </h3>
                   <p className="text-[13px] leading-[19px] text-[#4b5563]">

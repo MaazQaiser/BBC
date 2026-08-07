@@ -13,8 +13,7 @@ const WIDTH = {
 
 /**
  * The universal page container.
- * Side padding: 64px.
- * Max-width centres content on large screens.
+ * Responsive side padding: 20px mobile → 64px desktop.
  */
 export function Container({
   width     = "content",
@@ -25,8 +24,10 @@ export function Container({
   return (
     <div
       className={[
-        "w-full mx-auto",
-        "px-[64px]",
+        "box-border w-full mx-auto min-w-0 max-w-full",
+        "pl-[max(1.25rem,env(safe-area-inset-left))]",
+        "pr-[max(1.25rem,env(safe-area-inset-right))]",
+        "sm:pl-8 sm:pr-8 lg:px-[64px]",
         WIDTH[width],
         className,
       ]

@@ -28,7 +28,7 @@ export function TestimonialsSection() {
 
   return (
     <section className="py-16 lg:py-24 bg-[#F8F8F8]" aria-labelledby="testimonials-heading">
-      <div className="max-w-[1280px] mx-auto px-[64px]">
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         <h2 id="testimonials-heading" className="text-3xl lg:text-4xl font-bold text-center text-[var(--color-text)] mb-12">
           What Our <span className="text-[var(--color-highlight)]">Customers</span> Say
         </h2>

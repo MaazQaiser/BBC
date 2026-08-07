@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { Container } from "@/components/layout/Container";
 import { HeroImageCarousel } from "@/components/home/HeroImageCarousel";
 import { HomeSearchBar } from "@/components/home/HomeSearchBar";
 
@@ -8,28 +9,25 @@ const TRUST_INDICATORS = [
   "Video walkaround",
 ];
 
-/**
- * Carento-style cinematic hero.
- * Copy and search card share one inset — left-aligned with wide side gutters.
- */
 export function SearchHeroSection() {
   return (
-    <section className="relative bg-[var(--color-dark)]" aria-labelledby="hero-heading">
-      <HeroImageCarousel />
+    <section className="relative w-full min-w-0 bg-[var(--color-dark)]" aria-labelledby="hero-heading">
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <HeroImageCarousel />
+      </div>
 
-      <div className="relative z-10 w-full mx-auto px-[64px] max-w-[1280px]">
-        {/* Hero copy — left-aligned above search card */}
-        <div className="max-w-2xl pt-32 pb-48 sm:pt-36 sm:pb-52 lg:pt-40 lg:pb-56">
+      <Container className="relative z-10 min-w-0">
+        <div className="box-border w-full min-w-0 max-w-full lg:max-w-2xl pt-[calc(var(--site-header-height)+1.5rem)] pb-8 sm:pt-[calc(var(--site-header-height)+2rem)] sm:pb-10 lg:pt-40 lg:pb-36">
           <h1
             id="hero-heading"
-            className="text-3xl sm:text-4xl lg:text-[3.5rem] lg:leading-[1.12] font-bold text-white mb-6 tracking-tight"
+            className="max-w-full text-3xl sm:text-4xl lg:text-[3.5rem] font-bold text-white mb-6 tracking-tight leading-[1.15] lg:leading-[1.12] break-words [overflow-wrap:anywhere]"
           >
             Search Our
             <br />
             Current Stock
           </h1>
 
-          <p className="text-base sm:text-lg text-white/75 mb-8 max-w-lg leading-relaxed">
+          <p className="w-full max-w-full sm:max-w-lg text-base sm:text-lg text-white/75 mb-8 leading-relaxed break-words [overflow-wrap:anywhere] [word-break:break-word]">
             Browse vehicles by price, mileage, make or model. Every listing
             includes clear photography, a condition report and a walkaround
             video where available.
@@ -37,21 +35,20 @@ export function SearchHeroSection() {
 
           <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-x-8 gap-y-3">
             {TRUST_INDICATORS.map((label) => (
-              <li key={label} className="flex items-center gap-2 text-sm text-white/90">
+              <li key={label} className="flex items-center gap-2 text-sm text-white/90 min-w-0">
                 <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#B8F040] shrink-0">
                   <Check size={12} className="text-[var(--color-text)]" strokeWidth={3} aria-hidden="true" />
                 </span>
-                {label}
+                <span className="min-w-0">{label}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Search card — full container width, aligned with category cards below */}
-        <div className="absolute bottom-0 left-0 right-0 translate-y-1/2">
+        <div className="relative z-20 w-full min-w-0 pb-10 sm:pb-12 lg:-mt-28 lg:pb-0">
           <HomeSearchBar />
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -30,7 +30,7 @@ export function HeroImageCarousel() {
   }, [reducedMotion]);
 
   return (
-    <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div className="absolute inset-0" aria-hidden="true">
       {HERO_SLIDES.map((slide, index) => {
         const isActive = index === active;
 
@@ -38,7 +38,7 @@ export function HeroImageCarousel() {
           <div
             key={slide.src}
             className={[
-              "absolute inset-0 transition-opacity ease-in-out",
+              "absolute inset-0 transition-opacity ease-in-out overflow-hidden",
               isActive ? "opacity-100 z-[1]" : "opacity-0 z-0",
             ].join(" ")}
             style={{ transitionDuration: `${FADE_MS}ms` }}
@@ -58,7 +58,6 @@ export function HeroImageCarousel() {
         );
       })}
 
-      {/* Dark overlay — heavier on left for text legibility */}
       <div
         className="absolute inset-0 z-[2] pointer-events-none"
         style={{
@@ -66,7 +65,6 @@ export function HeroImageCarousel() {
             "linear-gradient(to right, rgba(17,17,17,0.88) 0%, rgba(17,17,17,0.72) 38%, rgba(17,17,17,0.35) 68%, rgba(17,17,17,0.2) 100%)",
         }}
       />
-
     </div>
   );
 }

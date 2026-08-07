@@ -157,7 +157,9 @@
   --content-max-width:    1280px;
 
   /* Component sizing */
-  --navbar-height:        80px;
+  --topbar-height:        40px;    /* h-10 */
+  --navbar-height:        80px;    /* h-20 */
+  --site-header-height:   calc(var(--topbar-height) + var(--navbar-height) + 2px);
   --button-height-sm:     40px;    /* h-10 */
   --button-height-md:     48px;    /* h-12 */
   --button-height-lg:     56px;    /* h-14 */

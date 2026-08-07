@@ -48,7 +48,7 @@ export function Navbar({ variant = "solid" }: NavbarProps) {
     <header
       className={[
         isOverlay ? "fixed" : "sticky",
-        "top-0 left-0 right-0 z-[var(--z-sticky)]",
+        "top-0 left-0 right-0 z-[var(--z-sticky)] w-full min-w-0",
         "transition-[background-color] duration-200",
       ].join(" ")}
     >
@@ -123,16 +123,16 @@ export function Navbar({ variant = "solid" }: NavbarProps) {
         {open && (
           <div
             id="mobile-nav"
-            className="lg:hidden border-t border-white/10 bg-[rgba(22,30,26,0.97)] backdrop-blur-md"
+            className="lg:hidden border-t border-white/10 bg-[rgba(22,30,26,0.97)] backdrop-blur-md overflow-x-hidden"
           >
-            <Container className="py-4">
+            <Container className="py-4 min-w-0">
               {/* Mobile contact strip */}
-              <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-white/70 mb-4 pb-4 border-b border-white/10">
+              <div className="flex flex-col gap-1.5 text-xs text-white/70 mb-4 pb-4 border-b border-white/10 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2">
                 <a href={SITE_CONTACT.phoneHref} className="num hover:text-white transition-colors">
                   {SITE_CONTACT.phone}
                 </a>
-                <span>{SITE_CONTACT.location}</span>
-                <span className="num">{SITE_CONTACT.hours}</span>
+                <span className="hidden sm:inline">{SITE_CONTACT.location}</span>
+                <span className="hidden sm:inline num">{SITE_CONTACT.hours}</span>
               </div>
 
               <nav aria-label="Mobile navigation" className="space-y-0.5 mb-4">
@@ -148,25 +148,25 @@ export function Navbar({ variant = "solid" }: NavbarProps) {
                 ))}
               </nav>
 
-              <div className="pt-4 flex flex-col sm:flex-row gap-3 border-t border-white/10">
+              <div className="pt-4 flex flex-col gap-3 border-t border-white/10 sm:flex-row sm:gap-3 min-w-0">
                 <Link
                   href="/contact"
                   onClick={() => setOpen(false)}
-                  className="flex-1 inline-flex items-center justify-center h-11 rounded-[var(--radius-pill)] bg-white text-[var(--color-text)] text-sm font-semibold"
+                  className="w-full sm:flex-1 flex items-center justify-center h-11 px-4 rounded-[var(--radius-pill)] bg-white text-[var(--color-text)] text-sm font-semibold"
                 >
                   Book Appointment
                 </Link>
                 <a
                   href={SITE_CONTACT.phoneHref}
-                  className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-[var(--radius-pill)] border border-white/20 text-white text-sm font-medium"
+                  className="w-full sm:flex-1 flex items-center justify-center gap-2 h-11 px-4 rounded-[var(--radius-pill)] border border-white/20 text-white text-sm font-medium"
                 >
-                  <Phone size={15} /> Call Us
+                  <Phone size={15} aria-hidden="true" /> Call Us
                 </a>
                 <a
                   href={SITE_CONTACT.whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-[var(--radius-pill)] border border-white/35 text-white text-sm font-medium hover:bg-white/10 transition-colors"
+                  className="w-full sm:flex-1 flex items-center justify-center gap-2 h-11 px-4 rounded-[var(--radius-pill)] border border-white/20 text-white text-sm font-medium hover:bg-white/10 transition-colors"
                 >
                   <WhatsAppIcon size={18} /> WhatsApp
                 </a>

@@ -62,8 +62,8 @@ function SearchField({
   showChevron?: boolean;
 }) {
   return (
-    <div className="relative flex-1 min-w-0 px-4 sm:px-5 py-4 border-b border-[var(--color-border)] last:border-b-0 lg:border-b-0">
-      <div className="flex items-center gap-1.5 mb-2">
+    <div className="relative w-full min-w-0 px-4 sm:px-5 py-3.5 sm:py-4 border-b border-[var(--color-border)] last:border-b-0 lg:border-b-0">
+      <div className="flex items-center gap-1.5 mb-1.5 sm:mb-2">
         <Icon size={14} className="shrink-0 text-[var(--color-text-faint)]" strokeWidth={2} aria-hidden="true" />
         <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
       </div>
@@ -78,7 +78,7 @@ function SearchField({
 }
 
 function Divider() {
-  return <div className="hidden lg:block w-px self-stretch bg-[var(--color-border)] my-3" aria-hidden="true" />;
+  return <div className="hidden lg:block w-px self-stretch bg-[var(--color-border)] my-3 shrink-0" aria-hidden="true" />;
 }
 
 export function HomeSearchBar() {
@@ -109,17 +109,17 @@ export function HomeSearchBar() {
   };
 
   return (
-    <div className="w-full rounded-[var(--radius-2xl)] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-[var(--color-border)] overflow-hidden">
+    <div className="w-full min-w-0 max-w-full rounded-[var(--radius-2xl)] bg-white shadow-[0_12px_32px_rgba(0,0,0,0.10)] sm:shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-[var(--color-border)]">
       {/* Tabs row */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-2">
-        <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 p-3 sm:p-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 min-w-0">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => handleTab(tab.id)}
               className={[
-                "h-9 px-4 rounded-[var(--radius-pill)] text-sm font-semibold transition-colors duration-[var(--duration-hover)]",
+                "h-9 px-3 sm:px-4 rounded-[var(--radius-pill)] text-xs sm:text-sm font-semibold transition-colors duration-[var(--duration-hover)] whitespace-nowrap",
                 activeTab === tab.id
                   ? "bg-[var(--color-accent)] text-white"
                   : "text-[var(--color-text)] hover:bg-[var(--color-surface-2)]",
@@ -132,22 +132,21 @@ export function HomeSearchBar() {
 
         <Link
           href="/contact"
-          className="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
+          className="hidden sm:inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors shrink-0"
         >
           <HelpCircle size={16} strokeWidth={2} aria-hidden="true" />
           Need help?
         </Link>
       </div>
 
-      {/* Inner search panel */}
+      {/* Search fields */}
       <form
         onSubmit={handleSubmit}
         role="search"
         aria-label="Search vehicles"
-        className="p-2"
+        className="px-3 pb-3 sm:p-2 min-w-0"
       >
-        <div className="flex flex-col lg:flex-row lg:items-stretch rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-white overflow-hidden">
-          {/* Make / keyword */}
+        <div className="flex w-full min-w-0 flex-col lg:flex-row lg:items-stretch rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-white">
           <SearchField label="Make or keyword" icon={Search} showChevron={false}>
             <input
               type="search"
@@ -155,13 +154,12 @@ export function HomeSearchBar() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Any make or model"
               autoComplete="off"
-              className="w-full bg-transparent border-0 outline-none text-sm font-semibold text-[var(--color-text)] placeholder:text-[var(--color-text)] placeholder:font-semibold"
+              className="w-full min-w-0 bg-transparent border-0 outline-none text-sm font-semibold text-[var(--color-text)] placeholder:text-[var(--color-text)] placeholder:font-semibold"
             />
           </SearchField>
 
           <Divider />
 
-          {/* Max price */}
           <SearchField label="Max price" icon={Tag}>
             <select
               value={priceMax}
@@ -180,7 +178,6 @@ export function HomeSearchBar() {
 
           <Divider />
 
-          {/* Body type */}
           <SearchField label="Body type" icon={Car}>
             <select
               value={bodyType}
@@ -199,7 +196,6 @@ export function HomeSearchBar() {
 
           <Divider />
 
-          {/* Max mileage */}
           <SearchField label="Max mileage" icon={Gauge}>
             <select
               value={mileageMax}
@@ -216,10 +212,9 @@ export function HomeSearchBar() {
             </span>
           </SearchField>
 
-          {/* CTA */}
           <button
             type="submit"
-            className="shrink-0 m-2 lg:m-0 lg:rounded-none inline-flex items-center justify-center gap-2 px-6 lg:px-8 bg-[var(--color-accent)] text-white font-semibold text-sm hover:bg-[var(--color-accent-hover)] transition-colors duration-[var(--duration-hover)] rounded-[var(--radius-lg)] lg:min-w-[160px]"
+            className="w-full lg:w-auto shrink-0 m-0 lg:m-0 inline-flex items-center justify-center gap-2 h-12 px-6 lg:px-8 bg-[var(--color-accent)] text-white font-semibold text-sm hover:bg-[var(--color-accent-hover)] transition-colors duration-[var(--duration-hover)] rounded-[var(--radius-lg)] lg:rounded-none lg:min-w-[160px]"
           >
             <Search size={18} strokeWidth={2.5} aria-hidden="true" />
             Search Cars

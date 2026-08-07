@@ -5,7 +5,7 @@ import { VEHICLE_IMAGES } from "@/lib/vehicle-images";
 export function HomeCTA() {
   return (
     <section className="py-16 lg:py-20" aria-labelledby="cta-heading">
-      <div className="max-w-[1280px] mx-auto px-[64px]">
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         <div className="relative rounded-[var(--radius-3xl)] bg-[var(--color-accent)] overflow-hidden min-h-[280px] flex items-center">
           {/* Car image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}

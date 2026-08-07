@@ -23,7 +23,7 @@ export default function HomePage() {
     <>
       <Navbar variant="overlay" />
 
-      <main className="flex-1">
+      <main className="flex-1 w-full min-w-0">
         <SearchHeroSection />
         <CategoryCards />
         <StockGridSection vehicles={retailVehicles} />
