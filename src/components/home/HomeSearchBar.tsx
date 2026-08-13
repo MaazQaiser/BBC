@@ -62,7 +62,7 @@ function SearchField({
   showChevron?: boolean;
 }) {
   return (
-    <div className="relative w-full min-w-0 px-4 sm:px-5 py-3.5 sm:py-4 border-b border-[var(--color-border)] last:border-b-0 lg:border-b-0">
+    <div className="relative w-full min-w-0 px-4 sm:px-5 py-3.5 sm:py-4 border-b border-[var(--color-border)] last:border-b-0 lg:flex-1 lg:border-b-0">
       <div className="flex items-center gap-1.5 mb-1.5 sm:mb-2">
         <Icon size={14} className="shrink-0 text-[var(--color-text-faint)]" strokeWidth={2} aria-hidden="true" />
         <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
@@ -214,7 +214,7 @@ export function HomeSearchBar() {
 
           <button
             type="submit"
-            className="w-full lg:w-auto shrink-0 m-0 lg:m-0 inline-flex items-center justify-center gap-2 h-12 px-6 lg:px-8 bg-[var(--color-accent)] text-white font-semibold text-sm hover:bg-[var(--color-accent-hover)] transition-colors duration-[var(--duration-hover)] rounded-[var(--radius-lg)] lg:rounded-none lg:min-w-[160px]"
+            className="w-full shrink-0 inline-flex items-center justify-center gap-2 h-12 px-6 bg-[var(--color-accent)] text-white font-semibold text-sm leading-none hover:bg-[var(--color-accent-hover)] transition-colors duration-[var(--duration-hover)] rounded-[var(--radius-lg)] lg:h-auto lg:w-auto lg:self-stretch lg:px-8 lg:min-w-[168px] lg:rounded-none lg:rounded-r-[var(--radius-xl)]"
           >
             <Search size={18} strokeWidth={2.5} aria-hidden="true" />
             Search Cars
