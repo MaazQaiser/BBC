@@ -49,9 +49,10 @@ export function HeroImageCarousel() {
               fill
               priority={index === 0}
               className={[
-                "object-cover object-center",
+                "object-cover",
                 isActive && !reducedMotion ? "hero-ken-burns" : "",
               ].join(" ")}
+              style={{ objectPosition: slide.objectPosition }}
               sizes="100vw"
             />
           </div>
@@ -61,8 +62,10 @@ export function HeroImageCarousel() {
       <div
         className="absolute inset-0 z-[2] pointer-events-none"
         style={{
-          background:
-            "linear-gradient(to right, rgba(17,17,17,0.88) 0%, rgba(17,17,17,0.72) 38%, rgba(17,17,17,0.35) 68%, rgba(17,17,17,0.2) 100%)",
+          background: [
+            "linear-gradient(to right, rgba(17,17,17,0.93) 0%, rgba(17,17,17,0.72) 28%, rgba(17,17,17,0.28) 48%, rgba(17,17,17,0.08) 62%, transparent 78%)",
+            "linear-gradient(to bottom, rgba(17,17,17,0.35) 0%, transparent 42%, transparent 100%)",
+          ].join(", "),
         }}
       />
     </div>

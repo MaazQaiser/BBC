@@ -104,14 +104,14 @@ export function TradeEnquiryForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       <TextField
-        label="Business Name"
+        label="Business name"
         value={tradeSession.businessName}
         readOnly
         disabled
       />
 
       <TextField
-        label="Company Number"
+        label="Company number or VAT number"
         value={tradeSession.companyNumber}
         readOnly
         disabled

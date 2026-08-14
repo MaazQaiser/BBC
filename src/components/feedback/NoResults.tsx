@@ -16,18 +16,18 @@ export function NoResults({ query, onClear }: NoResultsProps) {
       </div>
 
       <h3 className="font-semibold text-base text-[var(--color-text)] mb-2">
-        No vehicles found
+        No cars currently match these filters
       </h3>
 
       <p className="type-small text-[var(--color-text-muted)] max-w-xs leading-relaxed mb-5">
         {query
           ? `No results for "${query}". Try adjusting your search or removing filters.`
-          : "No vehicles match your current filters. Try widening your search."}
+          : "Try removing one or more filters to see available stock."}
       </p>
 
       {onClear && (
         <Button variant="secondary" size="sm" onClick={onClear}>
-          Clear all filters
+          Clear filters
         </Button>
       )}
     </div>

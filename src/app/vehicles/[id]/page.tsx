@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { retailVehicles, getRetailVehicleById } from "@/lib/mock-data/vehicles";
 import { formatPrice } from "@/lib/filters";
+import { getVehiclePageUrl } from "@/lib/vehicle-page-url";
 import { Navbar } from "@/components/navigation/Navbar";
 import { Footer } from "@/components/navigation/Footer";
 import { Breadcrumb } from "@/components/navigation/Breadcrumb";
 import { Container } from "@/components/layout/Container";
 import { VehicleDetailContent } from "@/components/vehicle/VehicleDetailContent";
+import { VehicleVideoStructuredData } from "@/components/vehicle/VehicleVideoStructuredData";
+import { VehicleContactProvider } from "@/components/vehicle/VehicleContactContext";
 import { StickyContactPanel } from "@/components/vehicle/StickyContactPanel";
 
 interface PageProps {
@@ -33,27 +36,37 @@ export default async function VehicleDetailPage({ params }: PageProps) {
   if (!vehicle) notFound();
 
   const title = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+  const pageUrl = await getVehiclePageUrl(vehicle.id);
 
   return (
     <>
+      <VehicleVideoStructuredData vehicle={vehicle} />
       <Navbar />
 
-      <main className="flex-1 pb-28 lg:pb-12">
-        <Container className="py-6 md:py-8">
-          <Breadcrumb
-            items={[
-              { label: "Cars for Sale", href: "/search" },
-              { label: title },
-            ]}
-            className="mb-8"
-          />
+      <VehicleContactProvider
+        vehicleId={vehicle.id}
+        vehicleTitle={title}
+        registration={vehicle.registration}
+        pageUrl={pageUrl}
+      >
+        <main className="flex-1 pb-32 lg:pb-12 bg-[var(--color-surface-2)]">
+          <Container width="page" className="py-6 md:py-8">
+            <Breadcrumb
+              items={[
+                { label: "Cars for Sale", href: "/search" },
+                { label: title },
+              ]}
+              className="mb-6 md:mb-8"
+            />
 
-          <VehicleDetailContent vehicle={vehicle} />
-        </Container>
-      </main>
+            <VehicleDetailContent vehicle={vehicle} />
+          </Container>
+        </main>
 
-      <StickyContactPanel vehicleTitle={title} price={vehicle.price} />
-      <Footer />
+        <StickyContactPanel />
+      </VehicleContactProvider>
+
+      <Footer className="pb-[calc(var(--sticky-bar-height)+env(safe-area-inset-bottom)+0.75rem)] lg:pb-0" />
     </>
   );
 }

@@ -1,156 +1,254 @@
-import type { ConditionItem, FaultSeverity } from "@/lib/types";
-import { AlertTriangle, AlertCircle, Info, ShieldAlert } from "lucide-react";
+"use client";
 
-const SEVERITY_META: Record<
-  FaultSeverity,
-  { label: string; icon: typeof Info; bgClass: string; textClass: string; borderClass: string }
-> = {
-  advisory: {
-    label: "Advisory",
-    icon: Info,
-    bgClass:    "bg-[var(--color-surface-2)]",
-    textClass:  "text-[var(--color-text-muted)]",
-    borderClass:"border-[var(--color-border)]",
-  },
-  minor: {
-    label: "Minor",
-    icon: AlertCircle,
-    bgClass:    "bg-amber-50",
-    textClass:  "text-amber-700",
-    borderClass:"border-amber-200",
-  },
-  major: {
-    label: "Major",
-    icon: AlertTriangle,
-    bgClass:    "bg-orange-50",
-    textClass:  "text-orange-700",
-    borderClass:"border-orange-200",
-  },
-  "mot-fail": {
-    label: "MOT Failure",
-    icon: ShieldAlert,
-    bgClass:    "bg-red-50",
-    textClass:  "text-[var(--color-mot-fail)]",
-    borderClass:"border-red-200",
-  },
-};
+import { useState, useEffect, useCallback } from "react";
+import { X } from "lucide-react";
+import type { ConditionItem } from "@/lib/types";
+import {
+  getFaultCount,
+  formatFaultCount,
+  getFaultTitle,
+  getFaultQualifiers,
+  getFaultDetail,
+  getFaultPhotoAlt,
+  CONDITION_LEDGER_INTRO,
+  CONDITION_LEDGER_CLOSING,
+  CONDITION_LEDGER_EMPTY,
+} from "@/lib/condition-ledger";
+import { IconButton } from "@/components/buttons/IconButton";
 
-const SEVERITY_ORDER: FaultSeverity[] = ["mot-fail", "major", "minor", "advisory"];
-
-interface ConditionLedgerProps {
+export interface ConditionLedgerProps {
   items: ConditionItem[];
+  /** Render content only — heading provided by parent card */
+  embedded?: boolean;
 }
 
-export function ConditionLedger({ items }: ConditionLedgerProps) {
-  if (items.length === 0) {
-    return (
-      <section aria-labelledby="condition-heading" className="space-y-4">
-        <LedgerHeader count={0} />
-        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-6 text-center">
-          <p className="text-[var(--color-text-muted)] text-sm">No condition items to declare.</p>
-        </div>
-      </section>
-    );
-  }
+export function ConditionLedger({ items, embedded = false }: ConditionLedgerProps) {
+  const count = getFaultCount(items);
 
-  // Group by area, ordered by worst severity first
-  const grouped: Record<string, ConditionItem[]> = {};
-  const sorted = [...items].sort(
-    (a, b) => SEVERITY_ORDER.indexOf(a.severity) - SEVERITY_ORDER.indexOf(b.severity)
+  const body = (
+    <>
+      {count === 0 ? (
+        <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
+          {CONDITION_LEDGER_EMPTY}
+        </p>
+      ) : (
+        <ol className="space-y-8 sm:space-y-10 list-none m-0 p-0">
+          {items.map((item) => (
+            <ConditionLedgerFault key={item.id} item={item} />
+          ))}
+        </ol>
+      )}
+
+      <p className="text-sm text-[var(--color-text-muted)] leading-relaxed pt-4 border-t border-[var(--color-border)]">
+        {CONDITION_LEDGER_CLOSING}
+      </p>
+    </>
   );
-  for (const item of sorted) {
-    if (!grouped[item.area]) grouped[item.area] = [];
-    grouped[item.area].push(item);
-  }
 
-  const areaOrder = Object.keys(grouped).sort((a, b) => {
-    const worstA = SEVERITY_ORDER.indexOf(grouped[a][0].severity);
-    const worstB = SEVERITY_ORDER.indexOf(grouped[b][0].severity);
-    return worstA - worstB;
-  });
+  if (embedded) return body;
 
   return (
-    <section aria-labelledby="condition-heading" className="space-y-4">
-      <LedgerHeader count={items.length} />
-
-      {/* Legend */}
-      <div className="flex flex-wrap gap-2">
-        {SEVERITY_ORDER.map((s) => {
-          const meta = SEVERITY_META[s];
-          const Icon = meta.icon;
-          const count = items.filter((i) => i.severity === s).length;
-          if (count === 0) return null;
-          return (
-            <span
-              key={s}
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${meta.bgClass} ${meta.textClass} ${meta.borderClass}`}
-            >
-              <Icon size={12} />
-              {meta.label}: <span className="num font-semibold">{count}</span>
-            </span>
-          );
-        })}
-      </div>
-
-      {/* Items */}
-      <div className="space-y-3">
-        {areaOrder.map((area) => (
-          <div
-            key={area}
-            className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden"
-          >
-            <div className="px-4 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-surface-2)]">
-              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-faint)]">
-                {area}
-              </p>
-            </div>
-            <ul className="divide-y divide-[var(--color-border)]">
-              {grouped[area].map((item) => {
-                const meta = SEVERITY_META[item.severity];
-                const Icon = meta.icon;
-                return (
-                  <li key={item.id} className="flex items-start gap-3 px-4 py-3.5">
-                    <span
-                      className={`mt-0.5 flex-none w-5 h-5 rounded flex items-center justify-center ${meta.bgClass} ${meta.textClass} border ${meta.borderClass}`}
-                    >
-                      <Icon size={12} />
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-[var(--color-text)] leading-relaxed">
-                        {item.description}
-                      </p>
-                      <p className={`text-xs font-medium mt-0.5 ${meta.textClass}`}>{meta.label}</p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <p className="text-xs text-[var(--color-text-faint)] leading-relaxed">
-        All condition items are declared in full. Nothing is hidden. Severity ratings follow standard automotive
-        condition grading — advisory items are cosmetic or very minor; major items require attention but do not affect
-        roadworthiness.
-      </p>
+    <section
+      aria-labelledby="condition-heading"
+      className="space-y-6 pt-2 border-t border-[var(--color-border)]"
+    >
+      <header>
+        <h2
+          id="condition-heading"
+          className="text-xl sm:text-2xl font-semibold text-[var(--color-text)] tracking-tight"
+        >
+          What&apos;s wrong with it
+        </h2>
+        <p className="text-sm sm:text-base text-[var(--color-text-muted)] mt-2 leading-relaxed max-w-prose">
+          {CONDITION_LEDGER_INTRO}
+        </p>
+        {count > 0 && (
+          <p className="text-sm font-medium text-[var(--color-text)] mt-3 num">
+            {formatFaultCount(count)}
+          </p>
+        )}
+      </header>
+      {body}
     </section>
   );
 }
 
-function LedgerHeader({ count }: { count: number }) {
+function ConditionLedgerFault({ item }: { item: ConditionItem }) {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const title = getFaultTitle(item);
+  const qualifiers = getFaultQualifiers(item);
+  const detail = getFaultDetail(item);
+  const photoAlt = getFaultPhotoAlt(item);
+  const isMotFail = item.severity === "mot-fail";
+
+  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [lightboxOpen, closeLightbox]);
+
+  if (!item.photo) {
+    return (
+      <li className={isMotFail ? "sm:border-l-2 sm:border-[var(--color-error-border)] sm:pl-5" : ""}>
+        <FaultDetails
+          title={title}
+          qualifiers={qualifiers}
+          detail={detail}
+          isMotFail={isMotFail}
+        />
+      </li>
+    );
+  }
+
   return (
-    <div className="flex items-start gap-3">
-      <div>
-        <h2 id="condition-heading" className="text-lg font-semibold text-[var(--color-text)]">
-          Condition Ledger
-        </h2>
-        <p className="text-sm text-[var(--color-text-muted)] mt-0.5">
-          {count === 0
-            ? "This vehicle has no declared condition items."
-            : `${count} declared condition ${count === 1 ? "item" : "items"} — every fault listed openly.`}
-        </p>
+    <li
+      className={[
+        "flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6",
+        isMotFail ? "sm:border-l-2 sm:border-[var(--color-error-border)] sm:pl-5" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <FaultPhotoButton
+        src={item.photo}
+        alt={photoAlt}
+        onOpen={() => setLightboxOpen(true)}
+      />
+
+      <div className="flex-1 min-w-0 sm:pt-1">
+        <FaultDetails
+          title={title}
+          qualifiers={qualifiers}
+          detail={detail}
+          isMotFail={isMotFail}
+        />
       </div>
+
+      {lightboxOpen && (
+        <FaultPhotoLightbox
+          src={item.photo}
+          alt={photoAlt}
+          onClose={closeLightbox}
+        />
+      )}
+    </li>
+  );
+}
+
+function FaultDetails({
+  title,
+  qualifiers,
+  detail,
+  isMotFail,
+}: {
+  title: string;
+  qualifiers: string[];
+  detail?: string;
+  isMotFail: boolean;
+}) {
+  return (
+    <>
+      <h3 className="text-base font-semibold text-[var(--color-text)] leading-snug">
+        {title}
+      </h3>
+
+      {qualifiers.length > 0 && (
+        <p className="text-sm text-[var(--color-text-body)] mt-1.5 num leading-relaxed">
+          {qualifiers.join(" · ")}
+        </p>
+      )}
+
+      {detail && (
+        <p className="text-sm text-[var(--color-text-muted)] mt-2 leading-relaxed">
+          {detail}
+        </p>
+      )}
+
+      {isMotFail && (
+        <p className="text-xs font-medium text-[var(--color-error-text)] mt-2">
+          Recorded MOT failure item
+        </p>
+      )}
+    </>
+  );
+}
+
+function FaultPhotoButton({
+  src,
+  alt,
+  onOpen,
+}: {
+  src: string;
+  alt: string;
+  onOpen: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className={[
+        "relative w-full sm:w-44 md:w-52 shrink-0 rounded-[var(--radius-md)] overflow-hidden",
+        "border border-[var(--color-border)] bg-[var(--color-surface-2)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2",
+        "hover:border-[var(--color-border-strong)] transition-colors",
+      ].join(" ")}
+      aria-label={`View full-size photograph: ${alt}`}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        className="w-full aspect-[4/3] object-cover"
+      />
+    </button>
+  );
+}
+
+function FaultPhotoLightbox({
+  src,
+  alt,
+  onClose,
+}: {
+  src: string;
+  alt: string;
+  onClose: () => void;
+  label?: string;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[var(--z-modal)] bg-black/95 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Full-size fault photograph: ${alt}`}
+      onClick={onClose}
+    >
+      <IconButton
+        icon={<X size={20} />}
+        onClick={onClose}
+        aria-label="Close photograph"
+        variant="ghost"
+        className="absolute text-white hover:bg-white/10 focus-visible:ring-white top-[max(1rem,env(safe-area-inset-top))] right-[max(1rem,env(safe-area-inset-right))]"
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        className="max-h-[90vh] max-w-full object-contain rounded-[var(--radius-md)]"
+        onClick={(e) => e.stopPropagation()}
+      />
     </div>
   );
 }
+
+/* ─── Legacy exports ─────────────────────────────────────────────────── */
+export { SEVERITY_ORDER, SEVERITY_CONFIG } from "./condition-severity";
+export type { ConditionLedgerProps as ConditionLedgerItemProps } from "./ConditionLedger";

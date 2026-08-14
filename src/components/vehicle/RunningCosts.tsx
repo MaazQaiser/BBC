@@ -1,43 +1,86 @@
 import type { RunningCosts as RunningCostsType } from "@/lib/types";
 
 interface RunningCostsProps {
-  costs:         RunningCostsType;
+  costs: RunningCostsType;
   formerKeepers?: number;
 }
 
-export function RunningCosts({ costs, formerKeepers }: RunningCostsProps) {
-  const rows = [
-    { label: "Road Tax",          value: `£${costs.roadTaxAnnual}/yr` },
-    { label: "MPG (Combined)",    value: `${costs.mpgCombined} mpg` },
-    { label: "Insurance Group",   value: `Group ${costs.insuranceGroup}` },
-    ...(formerKeepers != null
-      ? [{ label: "Former Keepers", value: String(formerKeepers) }]
-      : []),
-  ];
+function formatInsuranceGroup(costs: RunningCostsType): string | null {
+  if (costs.insuranceGroup == null || Number.isNaN(costs.insuranceGroup)) {
+    return null;
+  }
+  const suffix = costs.insuranceGroupSuffix ?? "";
+  return `${costs.insuranceGroup}${suffix}`;
+}
+
+export function RunningCosts({ costs, formerKeepers, embedded = false }: RunningCostsProps & { embedded?: boolean }) {
+  const rows: { label: string; value: string }[] = [];
+
+  if (costs.roadTaxAnnual != null && !Number.isNaN(costs.roadTaxAnnual)) {
+    rows.push({
+      label: "Road tax",
+      value: `£${costs.roadTaxAnnual.toLocaleString("en-GB")}/yr`,
+    });
+  }
+
+  if (costs.mpgCombined != null && !Number.isNaN(costs.mpgCombined)) {
+    rows.push({
+      label: "MPG combined",
+      value: String(costs.mpgCombined),
+    });
+  }
+
+  const insurance = formatInsuranceGroup(costs);
+  if (insurance) {
+    rows.push({
+      label: "Insurance group",
+      value: insurance,
+    });
+  }
+
+  if (formerKeepers != null) {
+    rows.push({
+      label: "Former keepers",
+      value: String(formerKeepers),
+    });
+  }
+
+  const body = (
+    <>
+      {rows.length === 0 ? (
+        <p className="type-small text-[var(--color-text-muted)]">
+          Running cost information is not available for this vehicle.
+        </p>
+      ) : (
+        <dl className="border-t border-[var(--color-border)]">
+          {rows.map(({ label, value }) => (
+            <div
+              key={label}
+              className="grid grid-cols-1 sm:grid-cols-[9rem_1fr] gap-1 sm:gap-4 py-3 border-b border-[var(--color-border)] last:border-b-0"
+            >
+              <dt className="type-small text-[var(--color-text-muted)]">{label}</dt>
+              <dd className="type-small num font-medium text-[var(--color-text)]">
+                {value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      <p className="type-caption text-[var(--color-text-faint)] mt-3">
+        Manufacturer estimates. Actual figures vary with driving conditions.
+      </p>
+    </>
+  );
+
+  if (embedded) return body;
 
   return (
     <section aria-labelledby="costs-heading">
-      <h2 id="costs-heading" className="type-h3 mb-4">Running Cost Figures</h2>
-      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] overflow-hidden">
-        <table className="w-full type-small">
-          <tbody className="divide-y divide-[var(--color-border)]">
-            {rows.map(({ label, value }) => (
-              <tr
-                key={label}
-                className="bg-[var(--color-surface)] even:bg-[var(--color-surface-2)]"
-              >
-                <td className="px-4 py-3 text-[var(--color-text-muted)]">{label}</td>
-                <td className="px-4 py-3 text-right num font-medium text-[var(--color-text)]">
-                  {value}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p className="type-caption text-[var(--color-text-faint)] mt-2">
-        Manufacturer estimates. Actual figures vary with driving conditions.
-      </p>
+      <h2 id="costs-heading" className="type-h3 mb-4">
+        Running costs
+      </h2>
+      {body}
     </section>
   );
 }

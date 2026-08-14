@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { VEHICLE_IMAGES } from "@/lib/vehicle-images";
+import { SITE_CONTACT } from "@/lib/site-contact";
 
 export function HomeCTA() {
   return (
     <section className="py-16 lg:py-20" aria-labelledby="cta-heading">
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
-        <div className="relative rounded-[var(--radius-3xl)] bg-[var(--color-accent)] overflow-hidden min-h-[280px] flex items-center">
+        <div className="relative rounded-[var(--radius-xl)] bg-[var(--color-accent)] overflow-hidden min-h-[280px] flex items-center">
           {/* Car image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -25,18 +26,18 @@ export function HomeCTA() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/search"
-                className="inline-flex items-center justify-center h-12 px-8 rounded-[var(--radius-2xl)] bg-white text-[var(--color-accent)] font-semibold text-[15px] hover:bg-white/90 transition-colors"
+                className="inline-flex items-center justify-center h-12 px-8 rounded-[var(--radius-md)] bg-white text-[var(--color-accent)] font-semibold text-[15px] hover:bg-white/90 transition-colors"
               >
                 Browse stock
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-[var(--radius-2xl)] border-2 border-white text-white font-semibold text-[15px] hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-[var(--radius-md)] border border-white text-white font-semibold text-[15px] hover:bg-white/10 transition-colors"
               >
                 Contact us
               </Link>
               <a
-                href="https://wa.me/441614000000"
+                href={SITE_CONTACT.whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-[var(--radius-2xl)] text-white/90 text-sm font-medium hover:text-white transition-colors sm:hidden"

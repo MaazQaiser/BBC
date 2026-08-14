@@ -2,11 +2,12 @@ import type { Vehicle } from "@/lib/types";
 import { VehicleCard } from "./VehicleCard";
 
 export interface VehicleGridProps {
-  vehicles:      Vehicle[];
-  emptyMessage?: string;
-  tradeLinks?:   boolean;
-  columns?:      2 | 3 | 4;
-  className?:    string;
+  vehicles:       Vehicle[];
+  emptyMessage?:  string;
+  tradeLinks?:    boolean;
+  hideTradeBadge?: boolean;
+  columns?:       2 | 3 | 4;
+  className?:     string;
 }
 
 /* ─── Column presets ─────────────────────────────────────────────────────
@@ -22,6 +23,7 @@ export function VehicleGrid({
   vehicles,
   emptyMessage,
   tradeLinks,
+  hideTradeBadge,
   columns   = 3,
   className = "",
 }: VehicleGridProps) {
@@ -50,6 +52,7 @@ export function VehicleGrid({
           key={v.id}
           vehicle={v}
           href={tradeLinks ? `/trade/vehicles/${v.id}` : `/vehicles/${v.id}`}
+          hideTradeBadge={hideTradeBadge}
           className="h-full"
         />
       ))}

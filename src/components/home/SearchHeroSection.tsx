@@ -1,7 +1,8 @@
+"use client";
+
 import { Check } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { HeroImageCarousel } from "@/components/home/HeroImageCarousel";
-import { HomeSearchBar } from "@/components/home/HomeSearchBar";
 
 const TRUST_INDICATORS = [
   "Faults clearly listed",
@@ -11,13 +12,16 @@ const TRUST_INDICATORS = [
 
 export function SearchHeroSection() {
   return (
-    <section className="relative w-full min-w-0 bg-[var(--color-dark)]" aria-labelledby="hero-heading">
+    <section
+      className="relative w-full min-w-0 bg-[var(--color-dark)] min-h-[30rem] sm:min-h-[32rem] lg:min-h-[40rem]"
+      aria-labelledby="hero-heading"
+    >
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <HeroImageCarousel />
       </div>
 
       <Container className="relative z-10 min-w-0">
-        <div className="box-border w-full min-w-0 max-w-full lg:max-w-2xl pt-[calc(var(--site-header-height)+1.5rem)] pb-8 sm:pt-[calc(var(--site-header-height)+2rem)] sm:pb-10 lg:pt-40 lg:pb-36">
+        <div className="hero-search-hero-pad box-border w-full min-w-0 max-w-full lg:max-w-2xl pt-[calc(var(--site-header-height)+1.5rem)] sm:pt-[calc(var(--site-header-height)+2rem)] lg:pt-36">
           <h1
             id="hero-heading"
             className="max-w-full text-3xl sm:text-4xl lg:text-[3.5rem] font-bold text-white mb-6 tracking-tight leading-[1.15] lg:leading-[1.12] break-words [overflow-wrap:anywhere]"
@@ -36,17 +40,13 @@ export function SearchHeroSection() {
           <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-x-8 gap-y-3">
             {TRUST_INDICATORS.map((label) => (
               <li key={label} className="flex items-center gap-2 text-sm text-white/90 min-w-0">
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#B8F040] shrink-0">
+                <span className="check-icon w-5 h-5 shrink-0">
                   <Check size={12} className="text-[var(--color-text)]" strokeWidth={3} aria-hidden="true" />
                 </span>
                 <span className="min-w-0">{label}</span>
               </li>
             ))}
           </ul>
-        </div>
-
-        <div className="relative z-20 w-full min-w-0 pb-10 sm:pb-12 lg:-mt-28 lg:pb-0">
-          <HomeSearchBar />
         </div>
       </Container>
     </section>

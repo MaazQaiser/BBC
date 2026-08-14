@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/trade/", "/trade"],
       },
     ],
-    sitemap: "https://bbc-cars.co.uk/sitemap.xml",
+    sitemap: "https://manchestercaryard.co.uk/sitemap.xml",
   };
 }

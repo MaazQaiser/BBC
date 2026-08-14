@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   BURY BARGAIN CARS — Design Tokens
+   MANCHESTER CAR YARD — Design Tokens
    Single source of truth for every visual decision in the product.
-   Do NOT change values here without updating the design spec.
+   Calm, restrained, mobile-first. One accent colour. No loud styling.
    ═══════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
@@ -27,29 +27,27 @@
 
 
   /* ─── Color Palette ──────────────────────────────────────────────────
-     One accent colour. Primary buttons are dark (#111111).
-     Accent (#2563EB) is reserved for links, focus rings, interactive
-     states and checkbox/toggle fills.
-     No gradients. No multiple accent colours.
+     White / near-white dominates. One accent (#2E5B42) for actions and
+     condition-ledger emphasis. Red reserved for MOT fail states only.
+     No decorative gradients. No competing accent colours.
   ─────────────────────────────────────────────────────────────────── */
 
   /* Core */
-  --color-primary:        #111111;     /* Headings, primary button bg       */
-  --color-accent:         #2E5B42;     /* Brand green — links, focus, active */
-  --color-accent-hover:   #245035;     /* Darker on hover                    */
-  --color-accent-active:  #1C3D29;     /* Pressed state                      */
-  --color-accent-light:   #EDF4EF;     /* Very light sage — section tints    */
-  --color-accent-muted:   #A8C4B5;     /* Muted green — subtle borders       */
+  --color-primary:        #111111;     /* Headings, body emphasis          */
+  --color-accent:         #2E5B42;     /* Primary actions, links, focus      */
+  --color-accent-hover:   #245035;     /* Hover                            */
+  --color-accent-active:  #1C3D29;     /* Pressed                          */
+  --color-accent-light:   #EDF4EF;     /* Subtle section tints             */
+  --color-accent-muted:   #A8C4B5;     /* Muted green — dividers, icons    */
 
-  /* LUXED-style accents */
-  --color-highlight:      #D4AF37;     /* Yellow headline accent             */
-  --color-dark:           #111111;     /* Dark header / footer / sections    */
-  --color-dark-elevated:  #1A1A1A;     /* Elevated dark panels               */
-  --color-dark-border:    #2A2A2A;     /* Borders on dark surfaces           */
+  /* Surfaces — editorial catalogue feel */
+  --color-dark:           #111111;     /* Footer, hero overlay             */
+  --color-dark-elevated:  #1A1A1A;
+  --color-dark-border:    #2A2A2A;
 
-  /* Pastel category card backgrounds */
-  --color-pastel-blue:    #E8F0FE;
-  --color-pastel-yellow:  #FEF9E7;
+  /* Neutral section backgrounds (replaces loud pastel cards) */
+  --color-pastel-blue:    #F8F9FB;
+  --color-pastel-yellow:  #F8F9FB;
   --color-pastel-green:   #EDF4EF;
 
   /* Backgrounds */
@@ -121,8 +119,8 @@
   /* ─── Shadows ────────────────────────────────────────────────────────
      Very subtle only. Never heavy shadows.
   ─────────────────────────────────────────────────────────────────── */
-  --shadow-card:       0 4px 20px 0 rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 12px 32px 0 rgba(0, 0, 0, 0.08);
+  --shadow-card:       0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 12px 0 rgba(0, 0, 0, 0.06);
   --shadow-sm:         0 1px 4px 0 rgba(0, 0, 0, 0.04);
   --shadow-md:         0 4px 20px 0 rgba(0, 0, 0, 0.05);
   --shadow-lg:         0 12px 32px 0 rgba(0, 0, 0, 0.08);
@@ -158,13 +156,18 @@
 
   /* Component sizing */
   --topbar-height:        40px;    /* h-10 */
-  --navbar-height:        80px;    /* h-20 */
+  --navbar-height:        64px;    /* h-16 */
   --site-header-height:   calc(var(--topbar-height) + var(--navbar-height) + 2px);
   --button-height-sm:     40px;    /* h-10 */
   --button-height-md:     48px;    /* h-12 */
   --button-height-lg:     56px;    /* h-14 */
   --input-height:         52px;
   --sticky-bar-height:    72px;
+
+  /* Homepage hero search — half-widget overlap onto next section */
+  --hero-search-overlap:  10rem;
+  --hero-search-gap:      1rem;
+  --hero-search-clear:    4rem;
 
 
   /* ─── Typography scale ───────────────────────────────────────────────

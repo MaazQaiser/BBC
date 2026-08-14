@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { retailVehicles } from "@/lib/mock-data/vehicles";
 
-const BASE = "https://bbc-cars.co.uk";
+const BASE = "https://manchestercaryard.co.uk";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [

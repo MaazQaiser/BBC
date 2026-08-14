@@ -1,104 +1,167 @@
 import type { MotEntry } from "@/lib/types";
-import { CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import {
+  buildMotDisplayItems,
+  formatMotDate,
+  formatMotRecordMeta,
+  formatMotResultLabel,
+} from "@/lib/mot-history";
 
-export function MotHistory({ history }: { history: MotEntry[] }) {
-  if (history.length === 0) {
+function AdvisoryList({ advisories }: { advisories: string[] }) {
+  if (advisories.length === 0) {
     return (
-      <section aria-labelledby="mot-heading">
-        <h2 id="mot-heading" className="type-h3 mb-3">Full MOT History</h2>
-        <p className="type-small text-[var(--color-text-muted)]">No MOT records available.</p>
-      </section>
+      <p className="type-small text-[var(--color-text-muted)]">No advisories</p>
     );
   }
 
   return (
+    <div>
+      <p className="type-caption text-[var(--color-text-muted)] mb-1">Advisory</p>
+      <p className="type-small text-[var(--color-text-body)] break-words">
+        {advisories.join(" · ")}
+      </p>
+    </div>
+  );
+}
+
+function FailureList({ failures }: { failures: string[] }) {
+  return (
+    <div>
+      <p className="type-caption text-[var(--color-text-muted)] mb-1">Failed on</p>
+      <p className="type-small text-[var(--color-text-body)] break-words">
+        {failures.join(" · ")}
+      </p>
+    </div>
+  );
+}
+
+function MotRecordMeta({ entry }: { entry: Pick<MotEntry, "mileage" | "testCenter"> }) {
+  const meta = formatMotRecordMeta(entry);
+  if (!meta) return null;
+
+  return (
+    <p className="type-small num text-[var(--color-text-muted)] break-words">{meta}</p>
+  );
+}
+
+function MotRecordRow({
+  date,
+  resultLabel,
+  isFail,
+  children,
+}: {
+  date: string;
+  resultLabel: string;
+  isFail: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <article className="py-4 first:pt-0 border-b border-[var(--color-border)] last:border-b-0">
+      <div className="grid grid-cols-1 sm:grid-cols-[9.5rem_7.5rem_1fr] sm:gap-x-6 gap-y-2">
+        <p className="type-small font-medium text-[var(--color-text)] num">
+          {formatMotDate(date)}
+        </p>
+        <p
+          className={[
+            "type-small font-semibold uppercase tracking-wide",
+            isFail
+              ? "text-[var(--color-error-text)]"
+              : "text-[var(--color-text)]",
+          ].join(" ")}
+          aria-label={`MOT result: ${resultLabel}`}
+        >
+          {resultLabel}
+        </p>
+        <div className="sm:col-start-3 space-y-2 min-w-0">{children}</div>
+      </div>
+    </article>
+  );
+}
+
+export function MotHistory({ history, embedded = false }: { history: MotEntry[]; embedded?: boolean }) {
+  const items = buildMotDisplayItems(history);
+
+  const list = items.length === 0 ? (
+    <p className="type-small text-[var(--color-text-muted)]">
+      No MOT records available.
+    </p>
+  ) : (
+    <div>
+      {items.map((item) => {
+            if (item.kind === "fail-retest") {
+              const passMeta = formatMotRecordMeta(item.pass);
+              return (
+                <MotRecordRow
+                  key={`${item.fail.date}-retest`}
+                  date={item.fail.date}
+                  resultLabel="Fail → Passed"
+                  isFail
+                >
+                  <MotRecordMeta entry={item.fail} />
+                  <FailureList failures={item.fail.failures} />
+                  <p className="type-small text-[var(--color-text-body)]">
+                    <span className="text-[var(--color-text-muted)]">Retested: </span>
+                    {formatMotDate(item.pass.date)}
+                    {" · "}
+                    {formatMotResultLabel("pass")}
+                    {item.pass.rectifiedNote ? (
+                      <span className="text-[var(--color-text-muted)]">
+                        {" "}
+                        · {item.pass.rectifiedNote}
+                      </span>
+                    ) : null}
+                  </p>
+                  {passMeta ? (
+                    <p className="type-small num text-[var(--color-text-muted)]">
+                      {passMeta}
+                    </p>
+                  ) : null}
+                  {item.pass.advisories.length > 0 ? (
+                    <AdvisoryList advisories={item.pass.advisories} />
+                  ) : null}
+                </MotRecordRow>
+              );
+            }
+
+            if (item.kind === "fail") {
+              return (
+                <MotRecordRow
+                  key={item.entry.date}
+                  date={item.entry.date}
+                  resultLabel="Fail"
+                  isFail
+                >
+                  <MotRecordMeta entry={item.entry} />
+                  <FailureList failures={item.entry.failures} />
+                  {item.entry.advisories.length > 0 ? (
+                    <AdvisoryList advisories={item.entry.advisories} />
+                  ) : null}
+                </MotRecordRow>
+              );
+            }
+
+            return (
+              <MotRecordRow
+                key={item.entry.date}
+                date={item.entry.date}
+                resultLabel="Pass"
+                isFail={false}
+              >
+                <MotRecordMeta entry={item.entry} />
+                <AdvisoryList advisories={item.entry.advisories} />
+              </MotRecordRow>
+            );
+          })}
+        </div>
+  );
+
+  if (embedded) return list;
+
+  return (
     <section aria-labelledby="mot-heading">
-      <h2 id="mot-heading" className="type-h3 mb-5">Full MOT History</h2>
-
-      <ol className="relative space-y-3">
-        {/* Timeline spine */}
-        <div className="absolute left-[19px] top-5 bottom-5 w-px bg-[var(--color-border)] hidden sm:block" aria-hidden="true" />
-
-        {history.map((entry, i) => {
-          const passed = entry.result === "pass";
-          return (
-            <li key={i} className="relative sm:pl-10">
-              {/* Timeline dot */}
-              <span
-                className={[
-                  "hidden sm:flex absolute left-0 top-3.5 w-10 h-10 rounded-full",
-                  "items-center justify-center border-2 bg-[var(--color-surface)] z-10",
-                  passed
-                    ? "border-[var(--color-success)] text-[var(--color-success)]"
-                    : "border-[var(--color-error)] text-[var(--color-error)]",
-                ].join(" ")}
-                aria-hidden="true"
-              >
-                {passed ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
-              </span>
-
-              <div
-                className={[
-                  "rounded-[var(--radius-lg)] border p-4",
-                  passed
-                    ? "border-[var(--color-border)] bg-[var(--color-surface)]"
-                    : "border-[var(--color-error-border)] bg-[var(--color-error-bg)]",
-                ].join(" ")}
-              >
-                <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <span className={passed ? "text-[var(--color-success)]" : "text-[var(--color-error)]"}>
-                      {passed ? <CheckCircle2 size={15} className="sm:hidden" /> : <XCircle size={15} className="sm:hidden" />}
-                    </span>
-                    <span className={[
-                      "type-small font-semibold",
-                      passed ? "text-[var(--color-success-text)]" : "text-[var(--color-error-text)]",
-                    ].join(" ")}>
-                      {passed ? "Pass" : "Fail"}
-                    </span>
-                    <span className="num type-small text-[var(--color-text)]">
-                      {new Date(entry.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
-                    </span>
-                  </div>
-                  <span className="num type-small text-[var(--color-text-muted)]">
-                    {entry.mileage.toLocaleString("en-GB")} mi
-                  </span>
-                </div>
-
-                {entry.failures.length > 0 && (
-                  <div className="mb-2">
-                    <p className="type-caption font-semibold text-[var(--color-error)] mb-1 uppercase tracking-wider">Failures</p>
-                    <ul className="space-y-0.5">
-                      {entry.failures.map((f, j) => (
-                        <li key={j} className="flex items-start gap-2 type-small text-[var(--color-error-text)]">
-                          <XCircle size={12} className="mt-0.5 shrink-0" />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {entry.advisories.length > 0 && (
-                  <div>
-                    <p className="type-caption font-semibold text-[var(--color-warning)] mb-1 uppercase tracking-wider">Advisories</p>
-                    <ul className="space-y-0.5">
-                      {entry.advisories.map((a, j) => (
-                        <li key={j} className="flex items-start gap-2 type-small text-[var(--color-warning-text)]">
-                          <AlertTriangle size={12} className="mt-0.5 shrink-0" />
-                          {a}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <p className="type-caption text-[var(--color-text-faint)] mt-2">{entry.testCenter}</p>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+      <h2 id="mot-heading" className="type-h3 mb-4">
+        MOT history
+      </h2>
+      {list}
     </section>
   );
 }

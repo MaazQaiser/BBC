@@ -1,4 +1,10 @@
 import type { Vehicle } from "@/lib/types";
+import {
+  getRetailStock,
+  getTradeStock,
+  isRetailVehicle,
+  isTradeVehicle,
+} from "@/lib/vehicle-stock";
 
 export const vehicles: Vehicle[] = [
   {
@@ -15,19 +21,65 @@ export const vehicles: Vehicle[] = [
     doors: 5,
     seats: 5,
     colour: "Magnetic Grey",
+    registration: "MA18 FCS",
     engineCC: 1499,
     price: 8995,
     description:
       "A well-presented Focus ST-Line in Magnetic Grey. Drives solidly with good power delivery. Service history present. A few minor stone chips on the bonnet — all declared.",
-    images: ["/images/vehicles/car-06.jpg?v=2"],
+    images: [
+      "/images/vehicles/car-06.jpg?v=2",
+      "/images/vehicles/car-02.jpg?v=2",
+      "/images/vehicles/car-04.jpg?v=2",
+      "/images/vehicles/car-05.jpg?v=2",
+    ],
+    imageAlts: [
+      "2018 Ford Focus front three-quarter view",
+      "2018 Ford Focus rear three-quarter view",
+      "2018 Ford Focus driver side view",
+      "2018 Ford Focus interior view",
+    ],
     hasVideo: true,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "full",
     serviceRecords: [
-      { date: "2019-04-12", mileage: 12300, type: "Interim Service", location: "Ford Main Dealer, Manchester" },
-      { date: "2020-04-08", mileage: 24100, type: "Full Service", location: "Ford Main Dealer, Manchester" },
-      { date: "2021-05-20", mileage: 36400, type: "Full Service", location: "Kwik Fit, Salford" },
+      { date: "2024-02-10", mileage: 52800, type: "Interim Service", location: "Independent, Leigh" },
       { date: "2022-06-15", mileage: 46800, type: "Interim Service", location: "Independent, Leigh" },
+      { date: "2021-05-20", mileage: 36400, type: "Full Service", location: "Kwik Fit, Salford" },
+      { date: "2020-04-08", mileage: 24100, type: "Full Service", location: "Ford Main Dealer, Manchester" },
+      { date: "2019-04-12", mileage: 12300, type: "Interim Service", location: "Ford Main Dealer, Manchester" },
+    ],
+    v5cStatus: "present-in-name",
+    keys: { count: 1, sparePresent: false },
+    documentImages: [
+      {
+        id: "v001-d1",
+        type: "service-book",
+        label: "Service book",
+        imageUrl: "/images/vehicles/car-04.jpg?v=2",
+        alt: "Service book",
+      },
+      {
+        id: "v001-d2",
+        type: "mot-certificate",
+        label: "MOT certificate",
+        imageUrl: "/images/vehicles/car-05.jpg?v=2",
+        alt: "MOT certificate",
+      },
+      {
+        id: "v001-d3",
+        type: "invoice",
+        label: "Invoice",
+        imageUrl: "/images/vehicles/car-02.jpg?v=2",
+        alt: "Service invoice",
+      },
+      {
+        id: "v001-d4",
+        type: "keys",
+        label: "Keys",
+        imageUrl: "/images/vehicles/car-06.jpg?v=2",
+        alt: "Keys",
+      },
     ],
     documents: [
       { name: "V5C Logbook", present: true },
@@ -36,10 +88,40 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: false },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Minor stone chips on bonnet leading edge, approximately 6–8 chips under 3mm", severity: "advisory" },
-      { id: "c2", area: "Bodywork", description: "Light surface scratch on rear nearside door, 4cm — does not break the paint", severity: "advisory" },
-      { id: "c3", area: "Interior", description: "Driver seat bolster shows normal wear consistent with age and mileage", severity: "advisory" },
-      { id: "c4", area: "Tyres", description: "Nearside front tyre at 3mm — legal but recommend replacement within 6 months", severity: "minor", qualifier: "3mm tread depth" },
+      {
+        id: "c1",
+        title: "Stone chips on bonnet leading edge",
+        severity: "advisory",
+        photo: "/images/vehicles/car-06.jpg?v=2",
+        photoAlt: "Stone chips on bonnet leading edge under 3mm",
+        qualifiers: ["under 3mm", "6–8 chips"],
+      },
+      {
+        id: "c2",
+        title: "Light surface scratch on rear nearside door",
+        severity: "advisory",
+        photo: "/images/vehicles/car-02.jpg?v=2",
+        photoAlt: "Light surface scratch on rear nearside door approximately 4cm",
+        qualifiers: ["~4cm", "paint intact"],
+        detail: "Does not break the paint",
+      },
+      {
+        id: "c3",
+        title: "Wear to driver seat bolster",
+        severity: "advisory",
+        photo: "/images/vehicles/car-04.jpg?v=2",
+        photoAlt: "Driver seat bolster wear consistent with age and mileage",
+        qualifiers: ["cosmetic", "no tears"],
+        detail: "Normal wear consistent with age and mileage",
+      },
+      {
+        id: "c4",
+        title: "Nearside front tyre low on tread",
+        severity: "minor",
+        photo: "/images/vehicles/car-05.jpg?v=2",
+        photoAlt: "Nearside front tyre with 3.0mm tread",
+        qualifiers: ["3.0mm", "legal", "replace soon"],
+      },
     ],
     motHistory: [
       {
@@ -73,10 +155,11 @@ export const vehicles: Vehicle[] = [
         advisories: [],
         failures: [],
         testCenter: "Kwik Fit, Salford",
+        rectifiedNote: "Rectified same day",
       },
     ],
     motExpiry: "2025-03-14",
-    runningCosts: { mpgCombined: 44, mpgUrban: 37, mpgExtra: 50, insuranceGroup: 18, roadTaxAnnual: 195, co2gkm: 148 },
+    runningCosts: { mpgCombined: 44, mpgUrban: 37, mpgExtra: 50, insuranceGroup: 18, insuranceGroupSuffix: "E", roadTaxAnnual: 195, co2gkm: 148 },
     formerKeepers: 2,
     lat: 53.4968, lng: -2.5149,
     isTrade: false,
@@ -103,6 +186,7 @@ export const vehicles: Vehicle[] = [
     images: ["/images/vehicles/car-02.jpg?v=2"],
     hasVideo: false,
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "full",
     serviceRecords: [
       { date: "2017-05-10", mileage: 18200, type: "Full Service", location: "VW Main Dealer, Bolton" },
       { date: "2018-05-14", mileage: 30100, type: "Full Service", location: "VW Main Dealer, Bolton" },
@@ -117,9 +201,33 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: true },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Two small rust bubbles on nearside sill — approx 5mm each, have been treated but visible", severity: "minor" },
-      { id: "c2", area: "Bodywork", description: "Scuff mark on offside rear bumper, approx 8cm — colour transfer from minor car park contact", severity: "advisory" },
-      { id: "c3", area: "Interior", description: "Centre console lid has a crack across the hinge — functional but cosmetically imperfect", severity: "advisory" },
+      {
+      id: "c1",
+            title: "rust bubbles on nearside sill",
+            severity: "minor",
+            photo: "/images/vehicles/car-02.jpg?v=2",
+            photoAlt: "Rust bubbles on nearside sill — approx5mm",
+            qualifiers: ["approx5mm"],
+            detail: "approx 5mm each, have been treated but visible",
+          },
+      {
+      id: "c2",
+            title: "Scuff mark on offside rear bumper, approx 8cm",
+            severity: "advisory",
+            photo: "/images/vehicles/car-02.jpg?v=2",
+            photoAlt: "Scuff mark on offside rear bumper, approx 8cm — 8cm",
+            qualifiers: ["8cm"],
+            detail: "colour transfer from minor car park contact",
+          },
+      {
+      id: "c3",
+            title: "Centre console lid has a crack across the hinge",
+            severity: "advisory",
+            photo: "/images/vehicles/car-02.jpg?v=2",
+            photoAlt: "Centre console lid has a crack across the hinge — cosmetic, functional",
+            qualifiers: ["cosmetic", "functional"],
+            detail: "functional but cosmetically imperfect",
+          },
     ],
     motHistory: [
       {
@@ -137,6 +245,104 @@ export const vehicles: Vehicle[] = [
         advisories: ["Windscreen wiper blade deteriorated (8.2.4)"],
         failures: [],
         testCenter: "BBC Autos, Leigh",
+      },
+      {
+        date: "2022-06-08",
+        result: "pass",
+        mileage: 64800,
+        advisories: ["Slight oil leak · brake discs lightly scored"],
+        failures: [],
+        testCenter: "BBC Autos, Leigh",
+      },
+      {
+        date: "2021-05-20",
+        result: "pass",
+        mileage: 58400,
+        advisories: [],
+        failures: [],
+        testCenter: "BBC Autos, Leigh",
+      },
+      {
+        date: "2020-05-14",
+        result: "pass",
+        mileage: 51200,
+        advisories: ["Nearside front tyre worn close to legal limit"],
+        failures: [],
+        testCenter: "Halfords Autocentre, Bolton",
+      },
+      {
+        date: "2019-05-09",
+        result: "fail",
+        mileage: 44100,
+        advisories: [],
+        failures: ["Offside headlamp aim too high (1.2.1 (a))"],
+        testCenter: "Halfords Autocentre, Bolton",
+      },
+      {
+        date: "2019-05-10",
+        result: "pass",
+        mileage: 44100,
+        advisories: [],
+        failures: [],
+        testCenter: "Halfords Autocentre, Bolton",
+        rectifiedNote: "Rectified same day",
+      },
+      {
+        date: "2018-05-22",
+        result: "pass",
+        mileage: 36800,
+        advisories: ["Rear brake pad(s) wearing thin (1.1.13 (a) (ii))"],
+        failures: [],
+        testCenter: "VW Main Dealer, Bolton",
+      },
+      {
+        date: "2017-05-18",
+        result: "pass",
+        mileage: 29100,
+        advisories: [],
+        failures: [],
+        testCenter: "VW Main Dealer, Bolton",
+      },
+      {
+        date: "2016-05-12",
+        result: "pass",
+        mileage: 21400,
+        advisories: [],
+        failures: [],
+        testCenter: "VW Main Dealer, Bolton",
+      },
+    ],
+    formerKeepers: 3,
+    v5cStatus: "present-in-name",
+    keys: { count: 2, sparePresent: true },
+    documentImages: [
+      {
+        id: "v002-d1",
+        type: "service-book",
+        label: "Service book",
+        imageUrl: "/images/vehicles/car-02.jpg?v=2",
+        alt: "Service book",
+      },
+      {
+        id: "v002-d2",
+        type: "mot-certificate",
+        label: "MOT certificate",
+        imageUrl: "/images/vehicles/car-02.jpg?v=2",
+        alt: "MOT certificate",
+      },
+      {
+        id: "v002-d3",
+        type: "invoice",
+        label: "Invoice",
+        imageUrl: "/images/vehicles/car-02.jpg?v=2",
+        alt: "Service invoice",
+      },
+      {
+        id: "v002-d4",
+        type: "keys",
+        label: "Keys",
+        imageUrl: "/images/vehicles/car-02.jpg?v=2",
+        alt: "Keys",
       },
     ],
     motExpiry: "2025-06-18",
@@ -167,10 +373,40 @@ export const vehicles: Vehicle[] = [
     hasVideo: true,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "part",
     serviceRecords: [
       { date: "2021-04-20", mileage: 10200, type: "Full Service", location: "Vauxhall Main Dealer, Wigan" },
       { date: "2022-05-11", mileage: 20800, type: "Full Service", location: "Vauxhall Main Dealer, Wigan" },
       { date: "2023-06-08", mileage: 30100, type: "Interim Service", location: "BBC Autos, Leigh" },
+    ],
+    v5cStatus: "present-not-in-name",
+    formerKeepers: 4,
+    keys: { count: 2, sparePresent: true },
+    maintenanceEvidence: [
+      { type: "cambelt", detail: "Changed Aug 2023 · invoice held" },
+    ],
+    documentImages: [
+      {
+        id: "v003-d1",
+        type: "service-book",
+        label: "Service book",
+        imageUrl: "/images/vehicles/car-09.jpg?v=2",
+        alt: "Service book",
+      },
+      {
+        id: "v003-d2",
+        type: "cambelt",
+        label: "Cambelt invoice",
+        imageUrl: "/images/vehicles/car-09.jpg?v=2",
+        alt: "Cambelt invoice",
+      },
+      {
+        id: "v003-d3",
+        type: "handbook",
+        label: "Handbook",
+        imageUrl: "/images/vehicles/car-09.jpg?v=2",
+        alt: "Handbook",
+      },
     ],
     documents: [
       { name: "V5C Logbook", present: true },
@@ -179,8 +415,23 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: true },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Tiny stone chip on roof front edge — 1mm, no rust", severity: "advisory" },
-      { id: "c2", area: "Bodywork", description: "Very light swirl marks on bonnet visible in direct sunlight — common with silver paint", severity: "advisory" },
+      {
+      id: "c1",
+            title: "stone chip on roof front edge",
+            severity: "advisory",
+            photo: "/images/vehicles/car-09.jpg?v=2",
+            photoAlt: "Stone chip on roof front edge — 1mm, no rust",
+            qualifiers: ["1mm", "no rust"],
+            detail: "1mm, no rust",
+          },
+      {
+      id: "c2",
+            title: "swirl marks on bonnet visible in direct sunlight",
+            severity: "advisory",
+            photo: "/images/vehicles/car-09.jpg?v=2",
+            photoAlt: "Swirl marks on bonnet visible in direct sunlight",
+            detail: "common with silver paint",
+          },
     ],
     motHistory: [
       {
@@ -227,6 +478,7 @@ export const vehicles: Vehicle[] = [
     images: ["/images/vehicles/car-04.jpg?v=2"],
     hasVideo: false,
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "full",
     serviceRecords: [
       { date: "2016-06-14", mileage: 11200, type: "Full Service", location: "Honda Main Dealer, Warrington" },
       { date: "2017-07-03", mileage: 22400, type: "Full Service", location: "Honda Main Dealer, Warrington" },
@@ -241,9 +493,32 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: false },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Chips and light scratches on rear bumper — typical for age", severity: "advisory" },
-      { id: "c2", area: "Interior", description: "Rear seat squab has a small (2cm) tear on the passenger side — not visible when folded", severity: "advisory" },
-      { id: "c3", area: "Bodywork", description: "Small dent on offside rear quarter — 20mm, no paint damage", severity: "minor" },
+      {
+      id: "c1",
+            title: "Chips and light scratches on rear bumper",
+            severity: "advisory",
+            photo: "/images/vehicles/car-04.jpg?v=2",
+            photoAlt: "Chips and light scratches on rear bumper",
+            detail: "typical for age",
+          },
+      {
+      id: "c2",
+            title: "Rear seat squab has a small (2cm) tear on the passenger side",
+            severity: "advisory",
+            photo: "/images/vehicles/car-04.jpg?v=2",
+            photoAlt: "Rear seat squab has a small (2cm) tear on the passenger side — 2cm",
+            qualifiers: ["2cm"],
+            detail: "not visible when folded",
+          },
+      {
+      id: "c3",
+            title: "dent on offside rear quarter",
+            severity: "minor",
+            photo: "/images/vehicles/car-04.jpg?v=2",
+            photoAlt: "Dent on offside rear quarter — 20mm",
+            qualifiers: ["20mm"],
+            detail: "20mm, no paint damage",
+          },
     ],
     motHistory: [
       {
@@ -291,6 +566,7 @@ export const vehicles: Vehicle[] = [
     hasVideo: true,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "part",
     serviceRecords: [
       { date: "2020-05-08", mileage: 10100, type: "Full Service", location: "Toyota Main Dealer, Manchester" },
       { date: "2021-05-14", mileage: 17800, type: "Full Service", location: "Toyota Main Dealer, Manchester" },
@@ -303,7 +579,15 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: true },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Minor chip on offside front door lower edge — 2mm, no rust present", severity: "advisory" },
+      {
+      id: "c1",
+            title: "chip on offside front door lower edge",
+            severity: "advisory",
+            photo: "/images/vehicles/car-05.jpg?v=2",
+            photoAlt: "Chip on offside front door lower edge — 2mm, no rust",
+            qualifiers: ["2mm", "no rust"],
+            detail: "2mm, no rust present",
+          },
     ],
     motHistory: [
       {
@@ -351,6 +635,7 @@ export const vehicles: Vehicle[] = [
     hasVideo: true,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "full",
     serviceRecords: [
       { date: "2015-09-10", mileage: 18400, type: "Full Service", location: "BMW Main Dealer, Manchester" },
       { date: "2016-09-12", mileage: 34600, type: "Full Service", location: "BMW Main Dealer, Manchester" },
@@ -367,12 +652,60 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: true },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Scratch on nearside front wing — 15cm, faded paint visible", severity: "minor" },
-      { id: "c2", area: "Bodywork", description: "Light surface corrosion on both sills — cosmetic at present, not structural", severity: "minor" },
-      { id: "c3", area: "Interior", description: "Driver armrest has a 3cm split in the leather — common on this model at this age", severity: "advisory" },
-      { id: "c4", area: "Interior", description: "iDrive controller knob has wear marks — functional", severity: "advisory" },
-      { id: "c5", area: "Tyres", description: "Both rear tyres at 3mm — legal, recommend replacement soon", severity: "minor" },
-      { id: "c6", area: "Engine", description: "Minor oil seep from rocker cover gasket — drip-free at present, monitor", severity: "advisory" },
+      {
+      id: "c1",
+            title: "Scratch on nearside front wing",
+            severity: "minor",
+            photo: "/images/vehicles/car-06.jpg?v=2",
+            photoAlt: "Scratch on nearside front wing — 15cm",
+            qualifiers: ["15cm"],
+            detail: "15cm, faded paint visible",
+          },
+      {
+      id: "c2",
+            title: "surface corrosion on both sills",
+            severity: "minor",
+            photo: "/images/vehicles/car-06.jpg?v=2",
+            photoAlt: "Surface corrosion on both sills — cosmetic",
+            qualifiers: ["cosmetic"],
+            detail: "cosmetic at present, not structural",
+          },
+      {
+      id: "c3",
+            title: "Driver armrest has a 3cm split in the leather",
+            severity: "advisory",
+            photo: "/images/vehicles/car-06.jpg?v=2",
+            photoAlt: "Driver armrest has a 3cm split in the leather — 3cm",
+            qualifiers: ["3cm"],
+            detail: "common on this model at this age",
+          },
+      {
+      id: "c4",
+            title: "iDrive controller knob has wear marks",
+            severity: "advisory",
+            photo: "/images/vehicles/car-06.jpg?v=2",
+            photoAlt: "IDrive controller knob has wear marks — functional",
+            qualifiers: ["functional"],
+            detail: "functional",
+          },
+      {
+      id: "c5",
+            title: "tyres at 3mm",
+            severity: "minor",
+            photo: "/images/vehicles/car-06.jpg?v=2",
+            photoAlt: "Tyres at 3mm — 3mm, legal",
+            qualifiers: ["3mm", "legal", "replace soon"],
+            detail: "legal, recommend replacement soon",
+          },
+      {
+      id: "c6",
+            title: "oil seep from rocker cover gasket",
+            severity: "advisory",
+            photo: "/images/vehicles/car-06.jpg?v=2",
+            photoAlt: "Oil seep from rocker cover gasket — monitor",
+            qualifiers: ["monitor"],
+            detail: "drip-free at present, monitor",
+          },
     ],
     motHistory: [
       {
@@ -427,6 +760,7 @@ export const vehicles: Vehicle[] = [
     images: ["/images/vehicles/car-07.jpg?v=2"],
     hasVideo: false,
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "full",
     serviceRecords: [
       { date: "2022-06-14", mileage: 8200, type: "Full Service", location: "Kia Main Dealer, Bolton" },
     ],
@@ -437,7 +771,14 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: true },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Very faint mark on front bumper centre — barely visible, no depth", severity: "advisory" },
+      {
+      id: "c1",
+            title: "Very faint mark on front bumper centre",
+            severity: "advisory",
+            photo: "/images/vehicles/car-07.jpg?v=2",
+            photoAlt: "Very faint mark on front bumper centre",
+            detail: "barely visible, no depth",
+          },
     ],
     motHistory: [
       {
@@ -477,6 +818,7 @@ export const vehicles: Vehicle[] = [
     hasVideo: true,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "present-unverified",
     serviceRecords: [
       { date: "2018-07-20", mileage: 22400, type: "Full Service", location: "Ford Main Dealer, Manchester" },
       { date: "2019-07-18", mileage: 44800, type: "Full Service", location: "Ford Main Dealer, Manchester" },
@@ -490,10 +832,39 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: false },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Multiple scratches and dents on rear doors consistent with commercial use — all cosmetic", severity: "minor" },
-      { id: "c2", area: "Bodywork", description: "Offside front wing has a 30mm dent — shallow, paint intact", severity: "minor" },
-      { id: "c3", area: "Interior", description: "Cab carpet worn through — typical work van use", severity: "advisory" },
-      { id: "c4", area: "Engine", description: "EGR valve has been cleaned but may require replacement within 12–18 months based on mileage", severity: "minor" },
+      {
+      id: "c1",
+            title: "Multiple scratches and dents on rear doors consistent with commercial…",
+            severity: "minor",
+            photo: "/images/vehicles/car-08.jpg?v=2",
+            photoAlt: "Multiple scratches and dents on rear doors consistent with commercial… — cosmetic",
+            qualifiers: ["cosmetic"],
+            detail: "all cosmetic",
+          },
+      {
+      id: "c2",
+            title: "Offside front wing has a 30mm dent",
+            severity: "minor",
+            photo: "/images/vehicles/car-08.jpg?v=2",
+            photoAlt: "Offside front wing has a 30mm dent — 30mm, paint intact",
+            qualifiers: ["30mm", "paint intact"],
+            detail: "shallow, paint intact",
+          },
+      {
+      id: "c3",
+            title: "Cab carpet worn through",
+            severity: "advisory",
+            photo: "/images/vehicles/car-08.jpg?v=2",
+            photoAlt: "Cab carpet worn through",
+            detail: "typical work van use",
+          },
+      {
+      id: "c4",
+            title: "EGR valve has been cleaned but may require replacement within 12–18 m…",
+            severity: "minor",
+            photo: "/images/vehicles/car-08.jpg?v=2",
+            photoAlt: "EGR valve has been cleaned but may require replacement within 12–18 m…",
+          },
     ],
     motHistory: [
       {
@@ -548,6 +919,7 @@ export const vehicles: Vehicle[] = [
     images: ["/images/vehicles/car-09.jpg?v=2"],
     hasVideo: false,
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "full",
     serviceRecords: [
       { date: "2018-06-22", mileage: 12800, type: "Full Service", location: "Nissan Main Dealer, Wigan" },
       { date: "2019-06-14", mileage: 24200, type: "Full Service", location: "Nissan Main Dealer, Wigan" },
@@ -561,7 +933,15 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: false },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Two stone chips on bonnet — 2mm and 3mm, no rust", severity: "advisory" },
+      {
+      id: "c1",
+            title: "Stone chips on bonnet leading edge",
+            severity: "advisory",
+            photo: "/images/vehicles/car-09.jpg?v=2",
+            photoAlt: "Stone chips on bonnet leading edge — 2mm, 3mm",
+            qualifiers: ["2mm", "3mm", "no rust"],
+            detail: "2mm and 3mm, no rust",
+          },
     ],
     motHistory: [
       {
@@ -609,6 +989,7 @@ export const vehicles: Vehicle[] = [
     hasVideo: true,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     serviceHistoryPresent: true,
+    serviceHistoryStatus: "full",
     serviceRecords: [
       { date: "2023-04-18", mileage: 10200, type: "Full Service", location: "Hyundai Main Dealer, Manchester" },
     ],
@@ -619,7 +1000,14 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: true },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Extremely faint surface mark on passenger door lower edge — only visible at certain angles, no depth", severity: "advisory" },
+      {
+      id: "c1",
+            title: "surface mark on passenger door lower edge",
+            severity: "advisory",
+            photo: "/images/vehicles/car-10.jpg?v=2",
+            photoAlt: "Surface mark on passenger door lower edge",
+            detail: "only visible at certain angles, no depth",
+          },
     ],
     motHistory: [
       {
@@ -636,6 +1024,7 @@ export const vehicles: Vehicle[] = [
     lat: 53.4968, lng: -2.5149,
     isTrade: false,
     listedAt: "2024-11-12T09:00:00Z",
+    isSold: true,
   },
   // ─── Trade vehicles ────────────────────────────────────────────────
   {
@@ -659,7 +1048,20 @@ export const vehicles: Vehicle[] = [
     images: ["/images/vehicles/car-11.jpg?v=2"],
     hasVideo: false,
     serviceHistoryPresent: false,
+    serviceHistoryStatus: "none",
     serviceRecords: [],
+    v5cStatus: "applied-for",
+    formerKeepers: 6,
+    keys: { count: 1, sparePresent: false },
+    documentImages: [
+      {
+        id: "t001-d1",
+        type: "mot-certificate",
+        label: "MOT certificate",
+        imageUrl: "/images/vehicles/car-11.jpg?v=2",
+        alt: "MOT certificate",
+      },
+    ],
     documents: [
       { name: "V5C Logbook", present: true },
       { name: "MOT Certificate", present: true },
@@ -667,10 +1069,39 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: false },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Multiple minor dents and scratches throughout — consistent with age", severity: "minor" },
-      { id: "c2", area: "Bodywork", description: "Nearside rear quarter has a 60mm dent with scuffed paint", severity: "major" },
-      { id: "c3", area: "Interior", description: "Driver seat has a significant tear — approximately 10cm on backrest", severity: "minor" },
-      { id: "c4", area: "Engine", description: "Slight oil consumption — approximately 500ml between services. No warning lights.", severity: "minor" },
+      {
+      id: "c1",
+            title: "dents and scratches throughout",
+            severity: "minor",
+            photo: "/images/vehicles/car-11.jpg?v=2",
+            photoAlt: "Dents and scratches throughout",
+            detail: "consistent with age",
+          },
+      {
+      id: "c2",
+            title: "Nearside rear quarter has a 60mm dent with scuffed paint",
+            severity: "major",
+            photo: "/images/vehicles/car-11.jpg?v=2",
+            photoAlt: "Nearside rear quarter has a 60mm dent with scuffed paint — 60mm",
+            qualifiers: ["60mm"],
+          },
+      {
+      id: "c3",
+            title: "Driver seat has a significant tear",
+            severity: "minor",
+            photo: "/images/vehicles/car-11.jpg?v=2",
+            photoAlt: "Driver seat has a significant tear — 10cm",
+            qualifiers: ["10cm"],
+            detail: "approximately 10cm on backrest",
+          },
+      {
+      id: "c4",
+            title: "Slight oil consumption",
+            severity: "minor",
+            photo: "/images/vehicles/car-11.jpg?v=2",
+            photoAlt: "Slight oil consumption",
+            detail: "approximately 500ml between services. No warning lights.",
+          },
     ],
     motHistory: [
       {
@@ -685,6 +1116,7 @@ export const vehicles: Vehicle[] = [
     motExpiry: "2025-10-08",
     runningCosts: { mpgCombined: 65, mpgUrban: 55, mpgExtra: 70, insuranceGroup: 14, roadTaxAnnual: 155, co2gkm: 115 },
     lat: 53.4968, lng: -2.5149,
+    status: "trade",
     isTrade: true,
     listedAt: "2024-10-10T08:00:00Z",
   },
@@ -709,6 +1141,7 @@ export const vehicles: Vehicle[] = [
     images: ["/images/vehicles/car-01.jpg?v=2"],
     hasVideo: false,
     serviceHistoryPresent: false,
+    serviceHistoryStatus: "none",
     serviceRecords: [],
     documents: [
       { name: "V5C Logbook", present: true },
@@ -717,9 +1150,30 @@ export const vehicles: Vehicle[] = [
       { name: "Spare Key", present: false },
     ],
     conditionItems: [
-      { id: "c1", area: "Bodywork", description: "Faded paint on roof and bonnet — common for this colour/age", severity: "minor" },
-      { id: "c2", area: "Bodywork", description: "Front bumper has a crack on nearside corner — secured", severity: "minor" },
-      { id: "c3", area: "Interior", description: "Dash has a crack across the centre — not affecting function", severity: "advisory" },
+      {
+      id: "c1",
+            title: "Faded paint on roof and bonnet",
+            severity: "minor",
+            photo: "/images/vehicles/car-01.jpg?v=2",
+            photoAlt: "Faded paint on roof and bonnet",
+            detail: "common for this colour/age",
+          },
+      {
+      id: "c2",
+            title: "Front bumper has a crack on nearside corner",
+            severity: "minor",
+            photo: "/images/vehicles/car-01.jpg?v=2",
+            photoAlt: "Front bumper has a crack on nearside corner",
+            detail: "secured",
+          },
+      {
+      id: "c3",
+            title: "Dash has a crack across the centre",
+            severity: "advisory",
+            photo: "/images/vehicles/car-01.jpg?v=2",
+            photoAlt: "Dash has a crack across the centre",
+            detail: "not affecting function",
+          },
     ],
     motHistory: [
       {
@@ -734,13 +1188,14 @@ export const vehicles: Vehicle[] = [
     motExpiry: "2025-11-01",
     runningCosts: { mpgCombined: 44, mpgUrban: 37, mpgExtra: 49, insuranceGroup: 4, roadTaxAnnual: 155, co2gkm: 145 },
     lat: 53.4968, lng: -2.5149,
+    status: "trade",
     isTrade: true,
     listedAt: "2024-11-03T10:00:00Z",
   },
 ];
 
-export const retailVehicles = vehicles.filter((v) => !v.isTrade);
-export const tradeVehicles = vehicles.filter((v) => v.isTrade);
+export const retailVehicles = getRetailStock(vehicles);
+export const tradeVehicles = getTradeStock(vehicles);
 
 export function getVehicleById(id: string): Vehicle | undefined {
   return vehicles.find((v) => v.id === id);
@@ -748,12 +1203,12 @@ export function getVehicleById(id: string): Vehicle | undefined {
 
 export function getRetailVehicleById(id: string): Vehicle | undefined {
   const vehicle = getVehicleById(id);
-  return vehicle && !vehicle.isTrade ? vehicle : undefined;
+  return vehicle && isRetailVehicle(vehicle) ? vehicle : undefined;
 }
 
 export function getTradeVehicleById(id: string): Vehicle | undefined {
   const vehicle = getVehicleById(id);
-  return vehicle?.isTrade ? vehicle : undefined;
+  return vehicle && isTradeVehicle(vehicle) ? vehicle : undefined;
 }
 
 export function getVehicleBySlug(slug: string): Vehicle | undefined {

@@ -1,21 +1,55 @@
 import type { Vehicle } from "@/lib/types";
+import { formatMileage } from "@/lib/filters";
 
-/** Standard inclusions shown on every retail vehicle detail page */
+const FALLBACK_VIEWS = [
+  "front three-quarter view",
+  "rear three-quarter view",
+  "driver side view",
+  "interior view",
+  "engine bay view",
+  "dashboard view",
+];
+
+/** Meaningful alt text for gallery images */
+export function getVehicleImageAlt(vehicle: Vehicle, index: number): string {
+  if (vehicle.imageAlts?.[index]) return vehicle.imageAlts[index];
+  const view = FALLBACK_VIEWS[index] ?? `view ${index + 1}`;
+  return `${vehicle.year} ${vehicle.make} ${vehicle.model} ${view}`;
+}
+
+/** Compact key specification line shown under the derivative */
+export function buildKeySpecLine(vehicle: Vehicle): string {
+  return `${vehicle.doors}dr · ${vehicle.fuelType} · ${vehicle.transmission}`;
+}
+
+/** Mileage + body/fuel/transmission for scan-friendly display */
+export function buildKeySpecWithMileage(vehicle: Vehicle): {
+  mileage: string;
+  specLine: string;
+} {
+  return {
+    mileage: formatMileage(vehicle.mileage),
+    specLine: buildKeySpecLine(vehicle),
+  };
+}
+
+/** Factual price context — reflects disclosed condition */
+export function buildPriceExplanation(): string {
+  return (
+    "The price reflects this vehicle's disclosed condition. " +
+    "Declared faults, MOT history and available records are shown on this page."
+  );
+}
+
+/** Factual inclusions list — no promotional language */
 export function buildWhatsIncluded(vehicle: Vehicle): string[] {
   const items = [
-    "Clear condition report with every declared fault",
+    "Declared faults listed in the condition report",
     "Full MOT history with advisories",
-    "Transparent pricing — no hidden fees",
   ];
 
   if (vehicle.serviceHistoryPresent) {
     items.push("Service history where records exist");
-  }
-  if (vehicle.hasVideo) {
-    items.push("Walkaround video where available");
-  }
-  if (vehicle.documents.some((d) => d.name.toLowerCase().includes("spare key") && d.present)) {
-    items.push("Spare key where present");
   }
 
   return items;

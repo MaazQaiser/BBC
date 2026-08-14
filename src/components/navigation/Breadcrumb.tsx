@@ -27,7 +27,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
             <li key={i} className="flex items-center gap-1">
               {isLast ? (
                 <span
-                  className="type-small text-[var(--color-text-muted)]"
+                  className="type-small text-[var(--color-text-muted)] break-words [overflow-wrap:anywhere] max-w-[16rem] sm:max-w-none"
                   aria-current="page"
                 >
                   {item.label}

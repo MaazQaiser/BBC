@@ -17,7 +17,7 @@ function Stars({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5" aria-label={`${count} out of 5 stars`}>
       {Array.from({ length: count }).map((_, i) => (
-        <span key={i} className="text-[var(--color-highlight)] text-sm">★</span>
+        <span key={i} className="text-[var(--color-accent-muted)] text-sm">★</span>
       ))}
     </div>
   );
@@ -27,10 +27,10 @@ export function TestimonialsSection() {
   const featured = TESTIMONIALS[0];
 
   return (
-    <section className="py-16 lg:py-24 bg-[#F8F8F8]" aria-labelledby="testimonials-heading">
+    <section className="py-16 lg:py-24 bg-[var(--color-surface-2)]" aria-labelledby="testimonials-heading">
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         <h2 id="testimonials-heading" className="text-3xl lg:text-4xl font-bold text-center text-[var(--color-text)] mb-12">
-          What Our <span className="text-[var(--color-highlight)]">Customers</span> Say
+          What Our Customers Say
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">

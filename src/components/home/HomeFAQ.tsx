@@ -34,7 +34,7 @@ export function HomeFAQ() {
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         <div className="max-w-3xl mx-auto">
           <h2 id="faq-heading" className="text-3xl lg:text-4xl font-bold text-[var(--color-text)] mb-8 text-center lg:text-left">
-            Frequently Asked <span className="text-[var(--color-highlight)]">Questions</span>
+            Frequently Asked Questions
           </h2>
 
           <div className="space-y-3">

@@ -1,106 +1,118 @@
-import { Fuel, Gauge, Calendar, Palette, Car, Users, DoorOpen } from "lucide-react";
 import type { Vehicle } from "@/lib/types";
-import { formatMileage } from "@/lib/filters";
-import { buildWhatsIncluded } from "@/lib/vehicle-detail";
+import { getVehicleImageAlt, buildWhatsIncluded } from "@/lib/vehicle-detail";
+import {
+  getFaultCount,
+  formatFaultCount,
+  CONDITION_LEDGER_INTRO,
+} from "@/lib/condition-ledger";
 import { Gallery } from "@/components/vehicle/Gallery";
-import { PriceIncludedSection } from "@/components/vehicle/PriceIncludedSection";
+import { VehicleDetailSection } from "@/components/vehicle/VehicleDetailSection";
+import { VehicleSummaryPanel } from "@/components/vehicle/VehicleSummaryPanel";
 import { VehicleVideoSection } from "@/components/vehicle/VehicleVideoSection";
-import { ConditionLedger } from "@/components/vehicle/ConditionLedgerItem";
+import { ConditionLedger } from "@/components/vehicle/ConditionLedger";
 import { MotHistory } from "@/components/vehicle/MotHistory";
-import { DocumentCard } from "@/components/vehicle/DocumentCard";
+import { DocumentsAndHistory } from "@/components/vehicle/DocumentsAndHistory";
 import { RunningCosts } from "@/components/vehicle/RunningCosts";
 import { LocationSection } from "@/components/vehicle/LocationSection";
+import { VehicleContactSection } from "@/components/vehicle/VehicleContactSection";
 
 export interface VehicleDetailContentProps {
   vehicle: Vehicle;
-}
-
-function SpecItem({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon:  typeof Fuel;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center gap-2.5 p-3 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)]">
-      <Icon size={15} className="shrink-0 text-[var(--color-text-faint)]" aria-hidden="true" />
-      <div className="min-w-0">
-        <p className="type-caption text-[var(--color-text-faint)]">{label}</p>
-        <p className="type-small font-medium text-[var(--color-text)] num truncate">{value}</p>
-      </div>
-    </div>
-  );
+  /** Hide inline contact section — e.g. trade listings use enquiry flow */
+  hideContactSection?: boolean;
 }
 
 /**
- * Shared vehicle detail sections — same order as retail.
- * Do not reorder sections.
+ * Shared vehicle detail layout — gallery + sticky summary + grouped content cards.
+ * Section order unchanged per Phase 1 scope.
  */
-export function VehicleDetailContent({ vehicle }: VehicleDetailContentProps) {
+export function VehicleDetailContent({ vehicle, hideContactSection }: VehicleDetailContentProps) {
   const title         = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const whatsIncluded = buildWhatsIncluded(vehicle);
+  const imageAlts     = vehicle.images.map((_, i) => getVehicleImageAlt(vehicle, i));
+  const faultCount    = getFaultCount(vehicle.conditionItems);
 
   return (
-    <article className="max-w-3xl space-y-12">
-      {/* 1. Photo Gallery */}
-      <Gallery images={vehicle.images} alt={title} />
+    <article className="w-full min-w-0">
+      <div className="lg:grid lg:grid-cols-[22rem_minmax(0,1fr)] xl:grid-cols-[24rem_minmax(0,1fr)] lg:gap-8 xl:gap-10 lg:items-start">
+        {/* Desktop summary — sticky panel on the left */}
+        <aside className="hidden lg:block min-w-0">
+          <VehicleSummaryPanel
+            sticky
+            vehicle={vehicle}
+            whatsIncluded={whatsIncluded}
+            hideContact={hideContactSection}
+          />
+        </aside>
 
-      {/* 2. Vehicle Title, Derivative & Key Specifications */}
-      <section aria-labelledby="vehicle-title">
-        <h1 id="vehicle-title" className="type-h2 text-[var(--color-text)] mb-1">
-          {title}
-        </h1>
-        <p className="type-body text-[var(--color-text-muted)] mb-5">{vehicle.variant}</p>
+        {/* Main column — gallery + detail cards */}
+        <div className="min-w-0 space-y-5">
+          <Gallery images={vehicle.images} alts={imageAlts} />
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <SpecItem icon={Calendar} label="Year"     value={String(vehicle.year)} />
-          <SpecItem icon={Gauge}    label="Mileage"  value={formatMileage(vehicle.mileage)} />
-          <SpecItem icon={Fuel}     label="Fuel"     value={vehicle.fuelType} />
-          <SpecItem icon={Car}      label="Gearbox"  value={vehicle.transmission} />
-          <SpecItem icon={Car}      label="Body"     value={vehicle.bodyType} />
-          <SpecItem icon={Palette}  label="Colour"   value={vehicle.colour} />
-          <SpecItem icon={DoorOpen} label="Doors"    value={String(vehicle.doors)} />
-          <SpecItem icon={Users}    label="Seats"    value={String(vehicle.seats)} />
-          <SpecItem icon={Car}      label="Engine"   value={`${vehicle.engineCC}cc`} />
+          <div className="lg:hidden">
+            <VehicleSummaryPanel
+              vehicle={vehicle}
+              whatsIncluded={whatsIncluded}
+              hideContact={hideContactSection}
+            />
+          </div>
+
+          <div className="space-y-5">
+            {vehicle.videoUrl ? (
+              <VehicleDetailSection
+                id="video"
+                title="Walkaround video"
+                description="Cold start, declared faults, interior and electrics — where recorded for this vehicle."
+              >
+                <VehicleVideoSection
+                  embedded
+                  src={vehicle.videoUrl}
+                  posterImage={vehicle.images[0]}
+                  posterAlt={vehicle.images[0] ? imageAlts[0] : undefined}
+                  title={`${title} walkaround video`}
+                />
+              </VehicleDetailSection>
+            ) : null}
+
+            <VehicleDetailSection
+              id="condition"
+              title="What's wrong with it"
+              description={CONDITION_LEDGER_INTRO}
+              badge={faultCount > 0 ? formatFaultCount(faultCount) : undefined}
+            >
+              <ConditionLedger embedded items={vehicle.conditionItems} />
+            </VehicleDetailSection>
+
+            <VehicleDetailSection id="mot" title="MOT history">
+              <MotHistory embedded history={vehicle.motHistory} />
+            </VehicleDetailSection>
+
+            <VehicleDetailSection id="documents" title="Service history and paperwork">
+              <DocumentsAndHistory embedded vehicle={vehicle} />
+            </VehicleDetailSection>
+
+            <VehicleDetailSection id="costs" title="Running costs">
+              <RunningCosts
+                embedded
+                costs={vehicle.runningCosts}
+                formerKeepers={vehicle.formerKeepers}
+              />
+            </VehicleDetailSection>
+
+            <VehicleDetailSection id="location" title="Where we are">
+              <LocationSection embedded />
+            </VehicleDetailSection>
+
+            {!hideContactSection ? (
+              <div className="lg:hidden">
+                <VehicleDetailSection id="contact" title="Contact">
+                  <VehicleContactSection embedded />
+                </VehicleDetailSection>
+              </div>
+            ) : null}
+          </div>
         </div>
-      </section>
-
-      {/* 3. Price & What's Included */}
-      <PriceIncludedSection price={vehicle.price} whatsIncluded={whatsIncluded} />
-
-      {/* 4. Vehicle Video */}
-      {vehicle.hasVideo && vehicle.videoUrl && (
-        <VehicleVideoSection
-          src={vehicle.videoUrl}
-          posterImage={vehicle.images[0]}
-          title={`${title} walkaround video`}
-        />
-      )}
-
-      {/* 5. Condition Ledger */}
-      <ConditionLedger items={vehicle.conditionItems} />
-
-      {/* 6. Full MOT History */}
-      <MotHistory history={vehicle.motHistory} />
-
-      {/* 7. Documents & History (includes service history) */}
-      <DocumentCard
-        vehicle={vehicle}
-        serviceRecords={vehicle.serviceRecords}
-        serviceHistoryPresent={vehicle.serviceHistoryPresent}
-      />
-
-      {/* 8. Running Cost Figures */}
-      <RunningCosts
-        costs={vehicle.runningCosts}
-        formerKeepers={vehicle.formerKeepers ?? 2}
-      />
-
-      {/* 9. Location & Directions */}
-      <LocationSection />
+      </div>
     </article>
   );
 }

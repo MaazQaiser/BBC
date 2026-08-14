@@ -13,13 +13,17 @@ export const HERO_SLIDES = [
   {
     src: HERO_IMAGES.forecourt,
     alt: "Used cars on the Manchester Car Yard forecourt",
+    /** Right side — visible above the search widget */
+    objectPosition: "68% 62%",
   },
   {
     src: HERO_IMAGES.interior,
     alt: "Detailed interior photography of a listed vehicle",
+    objectPosition: "78% 8%",
   },
   {
     src: HERO_IMAGES.inspection,
     alt: "Mechanic inspecting a vehicle engine bay",
+    objectPosition: "92% 58%",
   },
 ] as const;

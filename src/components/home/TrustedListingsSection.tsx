@@ -39,12 +39,12 @@ const COLLAGE = [
 
 export function TrustedListingsSection() {
   return (
-    <section className="py-16 lg:py-24 bg-[#F5F5F5]" aria-labelledby="trusted-heading">
+    <section className="py-16 lg:py-24 bg-[var(--color-surface-2)]" aria-labelledby="trusted-heading">
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left — copy */}
           <div className="max-w-xl">
-            <span className="inline-block px-4 py-1.5 mb-6 rounded-[var(--radius-pill)] bg-white border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-muted)] shadow-[var(--shadow-sm)]">
+            <span className="type-section-label mb-6">
               Honest Listings
             </span>
 
@@ -63,8 +63,8 @@ export function TrustedListingsSection() {
             <ul className="space-y-4 mb-10">
               {BENEFITS.map((item) => (
                 <li key={item} className="flex items-center gap-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#B8F040] shrink-0">
-                    <Check size={14} className="text-[var(--color-text)]" strokeWidth={3} aria-hidden="true" />
+                  <span className="check-icon w-6 h-6 shrink-0">
+                    <Check size={14} strokeWidth={3} aria-hidden="true" />
                   </span>
                   <span className="text-sm sm:text-base font-medium text-[var(--color-text)]">
                     {item}
@@ -73,10 +73,7 @@ export function TrustedListingsSection() {
               ))}
             </ul>
 
-            <Link
-              href="/search"
-              className="inline-flex items-center gap-2 h-12 px-7 rounded-[var(--radius-pill)] bg-[#B8F040] text-[var(--color-text)] text-sm font-bold hover:bg-[#a8dc30] transition-colors duration-[var(--duration-hover)]"
-            >
+            <Link href="/search" className="link-cta">
               Browse Stock
               <ArrowRight size={18} strokeWidth={2.5} aria-hidden="true" />
             </Link>
@@ -84,16 +81,11 @@ export function TrustedListingsSection() {
 
           {/* Right — spaced image grid */}
           <div className="relative">
-            <div
-              className="absolute inset-6 rounded-[2rem] bg-[#D4EDB8] opacity-60 -z-10"
-              aria-hidden="true"
-            />
-
             <div className="grid grid-cols-2 gap-4 sm:gap-5">
               {COLLAGE.map(({ src, alt, className }) => (
                 <div
                   key={src}
-                  className={`${className} overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.08)]`}
+                  className={`${className} overflow-hidden border border-[var(--color-border)] rounded-[var(--radius-lg)]`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

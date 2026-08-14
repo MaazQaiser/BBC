@@ -18,7 +18,7 @@ const OFFERS = [
   },
   {
     title: "Trade vehicles",
-    meta:  "Sold as seen — faults declared",
+    meta:  "Trade listings with declared faults",
     href:  "/trade",
     image: VEHICLE_IMAGES.car06,
   },
@@ -42,7 +42,7 @@ function PlayBadge({ size = "lg" }: { size?: "lg" | "sm" }) {
 
   return (
     <span
-      className={`inline-flex items-center justify-center ${dim} rounded-full bg-[#B8F040] text-[var(--color-text)] shadow-[0_4px_16px_rgba(0,0,0,0.15)]`}
+      className={`inline-flex items-center justify-center ${dim} rounded-full bg-[var(--color-accent)] text-white`}
       aria-hidden="true"
     >
       <Play size={icon} fill="currentColor" strokeWidth={0} className="ml-0.5" />
@@ -61,16 +61,16 @@ export function OffersSection() {
               id="offers-heading"
               className="text-[2rem] lg:text-[2.25rem] leading-tight font-bold text-[var(--color-text)] mb-2"
             >
-              Special Offers
+              Browse by focus
             </h2>
             <p className="text-base text-[var(--color-text-muted)] max-w-xl">
-              Current promotions and easy ways to browse the stock that suits you.
+              Straightforward ways to explore current stock.
             </p>
           </div>
 
           <Link
             href="/search"
-            className="inline-flex items-center gap-2 h-11 px-6 rounded-[var(--radius-pill)] bg-[#B8F040] text-[var(--color-text)] text-sm font-bold hover:bg-[#a8dc30] transition-colors shrink-0 self-start sm:self-auto"
+            className="link-cta shrink-0 self-start sm:self-auto"
           >
             View More
             <ArrowRight size={16} strokeWidth={2.5} aria-hidden="true" />

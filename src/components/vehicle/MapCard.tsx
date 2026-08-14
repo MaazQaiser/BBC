@@ -1,3 +1,5 @@
+import { SITE_NAME } from "@/lib/site-brand";
+
 interface MapCardProps {
   lat?:       number;
   lng?:       number;
@@ -5,7 +7,7 @@ interface MapCardProps {
   className?: string;
 }
 
-export function MapCard({ label = "Bury Bargain Cars", className = "" }: MapCardProps) {
+export function MapCard({ label = SITE_NAME, className = "" }: MapCardProps) {
   return (
     <section aria-labelledby="map-heading" className={className}>
       <h2 id="map-heading" className="type-h3 mb-4">Location</h2>

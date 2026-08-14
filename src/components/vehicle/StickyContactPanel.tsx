@@ -1,64 +1,100 @@
 "use client";
 
-import Link from "next/link";
-import { Phone, MessageCircle, Calendar } from "lucide-react";
+import { Phone, Calendar } from "lucide-react";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { Container } from "@/components/layout/Container";
-import { formatPrice } from "@/lib/filters";
 import { SITE_CONTACT } from "@/lib/site-contact";
+import {
+  CONTACT_ACTION_ACCENT,
+  CONTACT_ACTION_OUTLINE,
+  CONTACT_ACTION_STICKY,
+} from "@/lib/contact-action-styles";
+import { buildVehicleWhatsAppHref } from "@/lib/contact-links";
+import { useVehicleContactOptional } from "@/components/vehicle/VehicleContactContext";
 
 export interface StickyContactPanelProps {
-  vehicleTitle: string;
-  price:        number;
-  isTrade?:     boolean;
-  enquiryHref?: string;
+  /** Fallback when used outside VehicleContactProvider (e.g. legacy) */
+  vehicleTitle?:  string;
+  registration?:  string;
+  pageUrl?:         string;
+  isTrade?:         boolean;
+  enquiryHref?:     string;
 }
 
 /**
- * Fixed bottom bar on vehicle detail pages (mobile-first).
- * WhatsApp, telephone, and book an appointment.
+ * Fixed bottom bar on vehicle detail pages (mobile only).
+ * WhatsApp, telephone, and book a look.
  */
-export function StickyContactPanel({ vehicleTitle, price, isTrade, enquiryHref }: StickyContactPanelProps) {
-  const waText = encodeURIComponent(
-    `Hi, I'm interested in the ${isTrade ? "[Trade] " : ""}${vehicleTitle}`
-  );
+export function StickyContactPanel({
+  vehicleTitle: fallbackTitle = "",
+  registration: fallbackRegistration,
+  pageUrl: fallbackPageUrl = "",
+  isTrade,
+  enquiryHref,
+}: StickyContactPanelProps) {
+  const contact = useVehicleContactOptional();
+
+  const vehicleTitle = contact?.vehicleTitle ?? fallbackTitle;
+  const registration = contact?.registration ?? fallbackRegistration;
+  const pageUrl = contact?.pageUrl ?? fallbackPageUrl;
+  const openAppointment = contact?.openAppointment;
+
+  const whatsappHref = buildVehicleWhatsAppHref({
+    vehicleTitle: isTrade ? `[Trade] ${vehicleTitle}` : vehicleTitle,
+    registration,
+    pageUrl,
+  });
+
+  const actionClass = CONTACT_ACTION_STICKY;
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-[var(--z-sticky)] bg-[var(--color-surface)] border-t border-[var(--color-border)] shadow-[var(--shadow-sticky)] lg:hidden"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="fixed bottom-0 left-0 right-0 z-[var(--z-raised)] bg-[var(--color-surface)] border-t border-[var(--color-border)] shadow-[var(--shadow-sticky)] lg:hidden"
+      style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+      role="region"
+      aria-label="Contact actions"
     >
-      <Container className="py-3">
-        <div className="flex items-center gap-2 mb-2 sm:hidden">
-          <p className="num font-bold text-lg text-[var(--color-text)]">{formatPrice(price)}</p>
-          {isTrade && (
-            <p className="type-caption text-[var(--color-warning-text)]">Trade — sold as seen</p>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2">
+      <Container className="pt-3">
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
           <a
-            href={`${SITE_CONTACT.whatsappHref}?text=${waText}`}
+            href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center gap-1.5 h-10 px-3 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-white text-xs font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
+            className={[actionClass, CONTACT_ACTION_ACCENT].join(" ")}
           >
-            <MessageCircle size={15} aria-hidden="true" />
-            WhatsApp
+            <WhatsAppIcon size={16} className="shrink-0" />
+            <span className="truncate">WhatsApp</span>
           </a>
+
           <a
             href={SITE_CONTACT.phoneHref}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 h-10 px-3 rounded-[var(--radius-md)] border border-[var(--color-border-strong)] bg-[var(--color-surface)] text-xs font-medium text-[var(--color-text)] hover:bg-[var(--color-hover)] transition-colors num"
+            className={[actionClass, CONTACT_ACTION_OUTLINE, "num"].join(" ")}
           >
-            <Phone size={15} aria-hidden="true" />
-            Call
+            <Phone size={16} className="shrink-0" aria-hidden="true" />
+            <span className="truncate">Call</span>
           </a>
-          <Link
-            href={enquiryHref ?? "/contact"}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 h-10 px-3 rounded-[var(--radius-md)] bg-[#B8F040] text-[var(--color-text)] text-xs font-semibold hover:bg-[#a8dc30] transition-colors"
-          >
-            <Calendar size={15} aria-hidden="true" />
-            {isTrade ? "Enquire" : "Book"}
-          </Link>
+
+          {isTrade && enquiryHref ? (
+            <a
+              href={enquiryHref}
+              className={[actionClass, CONTACT_ACTION_OUTLINE].join(" ")}
+            >
+              <Calendar size={16} className="shrink-0" aria-hidden="true" />
+              <span className="truncate">Enquire</span>
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={openAppointment}
+              className={[actionClass, CONTACT_ACTION_OUTLINE].join(" ")}
+            >
+              <Calendar size={16} className="shrink-0" aria-hidden="true" />
+              <span className="truncate">
+                <span className="sm:hidden">Book</span>
+                <span className="hidden sm:inline">Book a look</span>
+              </span>
+            </button>
+          )}
         </div>
       </Container>
     </div>

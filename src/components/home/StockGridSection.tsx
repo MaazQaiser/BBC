@@ -17,7 +17,7 @@ export function StockGridSection({ vehicles, limit = 6 }: StockGridSectionProps)
   const total       = vehicles.length;
 
   return (
-    <section className="py-16 lg:py-20 bg-[#F8F8F8]" aria-labelledby="stock-heading">
+    <section className="py-16 lg:py-20 bg-[var(--color-surface-2)]" aria-labelledby="stock-heading">
       <Container>
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-10">
           <div>
@@ -35,7 +35,7 @@ export function StockGridSection({ vehicles, limit = 6 }: StockGridSectionProps)
 
           <Link
             href="/search"
-            className="inline-flex items-center gap-2 h-11 px-6 rounded-[var(--radius-pill)] bg-[#B8F040] text-[var(--color-text)] text-sm font-bold hover:bg-[#a8dc30] transition-colors shrink-0 self-start sm:self-auto"
+            className="link-cta shrink-0 self-start sm:self-auto"
           >
             View all
             <ArrowRight size={16} strokeWidth={2.5} aria-hidden="true" />

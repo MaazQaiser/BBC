@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Phone, MessageCircle, Mail } from "lucide-react";
+import { SITE_CONTACT } from "@/lib/site-contact";
 
 export interface ContactMethod {
   icon:        ReactNode;
@@ -42,7 +43,7 @@ export const CONTACT_METHODS: ContactMethod[] = [
     icon:        <MessageCircle size={18} />,
     label:       "WhatsApp",
     description: "Fastest response — usually within the hour during opening hours.",
-    href:        "https://wa.me/441614000000",
+    href:        SITE_CONTACT.whatsappHref,
     ctaLabel:    "Open WhatsApp",
     external:    true,
   },
@@ -50,14 +51,14 @@ export const CONTACT_METHODS: ContactMethod[] = [
     icon:        <Phone size={18} />,
     label:       "Phone",
     description: "Call us during opening hours.",
-    href:        "tel:+441614000000",
-    ctaLabel:    "0161 400 0000",
+    href:        SITE_CONTACT.phoneHref,
+    ctaLabel:    SITE_CONTACT.phone,
   },
   {
     icon:        <Mail size={18} />,
     label:       "Email",
     description: "For non-urgent enquiries.",
-    href:        "mailto:hello@burybargaincars.co.uk",
-    ctaLabel:    "hello@burybargaincars.co.uk",
+    href:        SITE_CONTACT.emailHref,
+    ctaLabel:    SITE_CONTACT.email,
   },
 ];

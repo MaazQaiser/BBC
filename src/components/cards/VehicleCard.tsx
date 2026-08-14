@@ -1,63 +1,30 @@
 import Link from "next/link";
-import { Gauge, Fuel, Cog } from "lucide-react";
+import { Video } from "lucide-react";
 import type { Vehicle } from "@/lib/types";
-import {
-  VideoBadge,
-  ServiceHistoryBadge,
-  FaultCountBadge,
-} from "@/components/badges/Badge";
 import { TradeVehicleBadge } from "@/components/trade/TradeVehicleBadge";
 import { formatPrice, formatMileage, motRemainingMonths } from "@/lib/filters";
+import { getServiceHistoryLabel } from "@/lib/service-history";
+import { getFaultCount } from "@/lib/condition-ledger";
 
-/* ─── Types ──────────────────────────────────────────────────────────── */
 export interface VehicleCardProps {
-  vehicle:    Vehicle;
-  href?:      string;
-  size?:      "default" | "compact";
-  className?: string;
+  vehicle:         Vehicle;
+  href?:           string;
+  size?:           "default" | "compact";
+  className?:      string;
+  hideTradeBadge?: boolean;
 }
 
-/* ─── Image placeholder ──────────────────────────────────────────────── */
-function VehicleImagePlaceholder() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-surface-2)]">
-      <svg
-        viewBox="0 0 80 50"
-        fill="none"
-        className="w-16 opacity-20"
-        aria-hidden="true"
-      >
-        <path
-          d="M8 34h64v5H8v-5zm4 0 8-13h32l8 13M20 20l4-8h24l4 8"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-        <circle cx="20" cy="37" r="3.5" stroke="currentColor" strokeWidth="2" />
-        <circle cx="60" cy="37" r="3.5" stroke="currentColor" strokeWidth="2" />
-      </svg>
-    </div>
-  );
-}
-
-/* ─── Component ──────────────────────────────────────────────────────────
-   Card spec:
-   • White background
-   • 16px border radius
-   • 1px solid #E8E8E8 border
-   • Shadow: 0 4px 20px rgba(0,0,0,.05)
-   • Hover shadow: 0 12px 32px rgba(0,0,0,.08)
-   • 24px padding
-   • Image: 16:10 aspect ratio
-────────────────────────────────────────────────────────────────────────── */
 export function VehicleCard({
   vehicle,
   href,
   size      = "default",
   className = "",
+  hideTradeBadge = false,
 }: VehicleCardProps) {
   const linkHref  = href ?? (vehicle.isTrade ? `/trade/vehicles/${vehicle.id}` : `/vehicles/${vehicle.id}`);
   const motMonths = motRemainingMonths(vehicle.motExpiry);
+  const faultCount = getFaultCount(vehicle.conditionItems);
+  const isSold = vehicle.isSold === true;
 
   return (
     <Link
@@ -68,12 +35,13 @@ export function VehicleCard({
         "shadow-[var(--shadow-card)]",
         "hover:shadow-[var(--shadow-card-hover)] hover:border-[var(--color-border-strong)]",
         "transition-shadow transition-[border-color] duration-[var(--duration-hover)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2",
+        isSold ? "opacity-75" : "",
         className,
       ]
         .filter(Boolean)
         .join(" ")}
     >
-      {/* ── Image — 16:10 ─────────────────────────────────────────── */}
       <div className="relative aspect-vehicle overflow-hidden bg-[var(--color-surface-2)]">
         {vehicle.images[0] ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -82,59 +50,58 @@ export function VehicleCard({
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
             className="absolute inset-0 w-full h-full object-cover"
           />
-        ) : (
-          <VehicleImagePlaceholder />
+        ) : null}
+
+        {isSold && (
+          <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+            <span className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--color-surface-3)] border border-[var(--color-border)] text-sm font-semibold text-[var(--color-text-muted)]">
+              Sold
+            </span>
+          </div>
         )}
 
-        {/* Badges — top-right */}
         <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
-          {vehicle.hasVideo && <VideoBadge />}
-          {vehicle.isTrade  && <TradeVehicleBadge size="sm" />}
+          {vehicle.hasVideo && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] bg-black/55 text-white text-[10px] font-medium backdrop-blur-sm">
+              <Video size={11} strokeWidth={2.5} aria-hidden="true" />
+              Video
+            </span>
+          )}
+          {vehicle.isTrade && !hideTradeBadge && <TradeVehicleBadge size="sm" />}
         </div>
       </div>
 
-      {/* ── Content — 24px padding ───────────────────────────────── */}
-      <div className={["flex flex-col flex-1", size === "compact" ? "p-4" : "p-6"].join(" ")}>
-
-        {/* Title + variant */}
-        <h3 className="font-semibold text-[var(--color-text)] text-base leading-snug mb-1 line-clamp-2">
+      <div className={["flex flex-col flex-1", size === "compact" ? "p-4" : "p-5 sm:p-6"].join(" ")}>
+        <h3 className="font-semibold text-[var(--color-text)] text-base leading-snug">
           {vehicle.year} {vehicle.make} {vehicle.model}
         </h3>
-        <p className="text-sm text-[var(--color-text-muted)] leading-snug mb-4 line-clamp-2 min-h-[2.5rem]">
+        <p className="text-sm text-[var(--color-text-muted)] leading-snug mt-1 mb-3 line-clamp-2">
           {vehicle.variant}
         </p>
 
-        {/* Key specs — 2-column grid avoids clipping on narrow cards */}
-        <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs text-[var(--color-text-muted)] mb-4">
-          <span className="flex items-center gap-1.5 min-w-0">
-            <Gauge size={13} className="shrink-0" aria-hidden="true" />
-            <span className="num truncate">{formatMileage(vehicle.mileage)}</span>
-          </span>
-          <span className="flex items-center gap-1.5 min-w-0">
-            <Fuel size={13} className="shrink-0" aria-hidden="true" />
-            <span className="truncate">{vehicle.fuelType}</span>
-          </span>
-          <span className="flex items-center gap-1.5 min-w-0 col-span-2">
-            <Cog size={13} className="shrink-0" aria-hidden="true" />
-            <span className="truncate">{vehicle.transmission}</span>
-          </span>
-        </div>
+        <p className="text-sm text-[var(--color-text-body)] num mb-1">
+          {formatMileage(vehicle.mileage)}
+        </p>
+        <p className="text-sm text-[var(--color-text-muted)] mb-4">
+          {vehicle.fuelType} · {vehicle.transmission}
+        </p>
 
-        {/* Badges */}
-        <div className="flex flex-wrap items-center gap-1.5 mb-4 min-h-[22px]">
-          {vehicle.serviceHistoryPresent && <ServiceHistoryBadge />}
-          <FaultCountBadge count={vehicle.conditionItems.length} />
-          {motMonths > 0 && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] bg-[var(--color-info-bg)] text-[var(--color-info-text)] border border-[var(--color-info-border)] text-[10px] font-medium">
-              <span className="num">{motMonths}m</span>&nbsp;MOT
-            </span>
-          )}
-        </div>
-
-        {/* Price — pinned to bottom */}
-        <p className="num font-semibold text-xl text-[var(--color-text)] tracking-tight mt-auto">
+        <p className="num font-semibold text-xl text-[var(--color-text)] tracking-tight mb-4">
           {formatPrice(vehicle.price)}
         </p>
+
+        <ul className="mt-auto space-y-1 text-xs text-[var(--color-text-muted)]">
+          {motMonths > 0 && (
+            <li>
+              MOT <span className="num">{motMonths}</span> {motMonths === 1 ? "month" : "months"}
+            </li>
+          )}
+          <li>
+            <span className="num">{faultCount}</span>{" "}
+            {faultCount === 1 ? "fault listed" : "faults listed"}
+          </li>
+          <li>{getServiceHistoryLabel(vehicle.serviceHistoryStatus)}</li>
+        </ul>
       </div>
     </Link>
   );

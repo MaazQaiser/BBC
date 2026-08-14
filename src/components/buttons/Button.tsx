@@ -17,17 +17,15 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /* ─── Variant styles ─────────────────────────────────────────────────────
-   Primary   → dark (#111111) background, white text.  Accent is NOT
-               used on primary buttons — it is reserved for links,
-               focus rings and interactive state indicators.
+   Primary   → accent green background, white text.
    Secondary → white background with a 1px border.
    Ghost     → transparent, text only.
 ────────────────────────────────────────────────────────────────────────── */
 const VARIANT: Record<ButtonVariant, string> = {
   primary: [
-    "bg-[#111111] text-white",
-    "hover:bg-[#1a1a1a]",
-    "active:bg-[#2a2a2a]",
+    "bg-[var(--color-accent)] text-white",
+    "hover:bg-[var(--color-accent-hover)]",
+    "active:bg-[var(--color-accent-active)]",
     "disabled:bg-[var(--color-disabled-bg)] disabled:text-[var(--color-disabled-text)]",
   ].join(" "),
 

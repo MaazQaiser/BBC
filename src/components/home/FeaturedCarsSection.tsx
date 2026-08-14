@@ -22,7 +22,7 @@ function FeaturedCarCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <Link
       href={`/vehicles/${vehicle.id}`}
-      className="group flex flex-col shrink-0 w-[300px] sm:w-[320px] snap-start rounded-[var(--radius-2xl)] bg-white border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-[var(--duration-hover)] overflow-hidden"
+      className="group flex flex-col shrink-0 w-[min(18.75rem,calc(100vw-2.5rem))] sm:w-[320px] snap-start rounded-[var(--radius-2xl)] bg-white border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-[var(--duration-hover)] overflow-hidden"
     >
       {/* Image */}
       <div className="relative aspect-[16/10] bg-[var(--color-surface-2)] overflow-hidden">
@@ -91,7 +91,7 @@ export function FeaturedCarsSection({ vehicles }: FeaturedCarsSectionProps) {
   if (!vehicles.length) return null;
 
   return (
-    <section className="py-16 lg:py-20 bg-[#F8F8F8]" aria-labelledby="featured-heading">
+    <section className="py-16 lg:py-20 bg-[var(--color-surface-2)]" aria-labelledby="featured-heading">
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         {/* Header */}
         <div className="flex items-end justify-between gap-6 mb-10">

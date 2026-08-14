@@ -51,7 +51,7 @@ export function VehicleTypeCards() {
 
           <Link
             href="/search"
-            className="inline-flex items-center gap-2 h-11 px-6 rounded-[var(--radius-pill)] bg-[#B8F040] text-[var(--color-text)] text-sm font-bold hover:bg-[#a8dc30] transition-colors shrink-0 self-start sm:self-auto"
+            className="link-cta shrink-0 self-start sm:self-auto"
           >
             View More
             <ArrowRight size={16} strokeWidth={2.5} aria-hidden="true" />

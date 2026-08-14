@@ -8,7 +8,7 @@ export function TradeListingClient({ vehicles }: { vehicles: Vehicle[] }) {
     <VehicleListingClient
       vehicles={vehicles}
       listingPath="/trade/listing"
-      pageTitle="Trade Vehicles"
+      pageTitle="Trade vehicles"
       tradeMode
     />
   );

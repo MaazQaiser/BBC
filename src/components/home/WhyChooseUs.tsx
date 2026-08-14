@@ -33,7 +33,7 @@ export function WhyChooseUs() {
       <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-[64px]">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-14 lg:mb-16">
-          <span className="inline-block px-4 py-1.5 mb-4 rounded-[var(--radius-pill)] bg-[#B8F040] text-xs font-semibold text-[var(--color-text)] shadow-[var(--shadow-sm)]">
+          <span className="type-section-label mb-4">
             Why Choose Us
           </span>
           <h2

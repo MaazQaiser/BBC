@@ -4,12 +4,11 @@ import { ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/navigation/Navbar";
 import { Footer } from "@/components/navigation/Footer";
 import { Container } from "@/components/layout/Container";
-import { TradeInformationHero } from "@/components/trade/TradeInformationHero";
 
 export const metadata: Metadata = {
   title: "Trade Vehicles",
   description:
-    "Trade vehicles offered for businesses purchasing vehicles for repair, dismantling, export or resale.",
+    "Trade vehicles sold for spares, repair or resale — for business buyers only.",
   robots: { index: false, follow: false },
 };
 
@@ -19,34 +18,51 @@ export default function TradeInformationPage() {
       <Navbar />
       <main className="flex-1 py-8 lg:py-12">
         <Container width="narrow">
-          <TradeInformationHero />
+          <div className="max-w-xl mx-auto">
+            <p className="type-label text-[var(--color-text-muted)] mb-2">
+              Trade vehicles
+            </p>
+            <h1 className="type-h2 text-[var(--color-text)] mb-6">
+              Trade vehicles
+            </h1>
 
-          <div className="mt-10 lg:mt-12">
-            <h1 className="type-h1 text-[var(--color-text)] mb-4">Trade Vehicles</h1>
-            <div className="type-body-lg text-[var(--color-text-muted)] space-y-4 leading-relaxed">
+            <div className="type-body text-[var(--color-text-body)] space-y-4 leading-relaxed mb-10">
               <p>
-                These vehicles are offered for businesses purchasing vehicles for repair,
-                dismantling, export or resale.
+                These vehicles are sold for spares, repair or resale.
               </p>
-              <p>Some vehicles may not be roadworthy.</p>
               <p>
-                Vehicles must be transported from our premises and cannot be driven away.
+                They are not prepared for retail sale and may not be roadworthy.
+              </p>
+              <p>
+                The buyer must arrange transport, and vehicles may not be driven
+                away.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 mt-10">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/trade/verify"
-                className="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-[var(--radius-md)] bg-[#111111] text-white text-[15px] font-medium hover:bg-[#1a1a1a] transition-colors"
+                className={[
+                  "inline-flex items-center justify-center gap-2 h-12 px-5 rounded-[var(--radius-md)]",
+                  "bg-[var(--color-accent)] text-white type-small font-medium",
+                  "hover:bg-[var(--color-accent-hover)] transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus-ring)] focus-visible:ring-offset-2",
+                ].join(" ")}
               >
-                Continue to Trade Vehicles
-                <ArrowRight size={16} />
+                Continue to trade vehicles
+                <ArrowRight size={16} aria-hidden="true" />
               </Link>
               <Link
                 href="/search"
-                className="inline-flex items-center justify-center h-12 px-5 rounded-[var(--radius-md)] bg-white text-[var(--color-text)] text-[15px] font-medium border border-[var(--color-border)] hover:bg-[var(--color-hover)] transition-colors"
+                className={[
+                  "inline-flex items-center justify-center h-12 px-5 rounded-[var(--radius-md)]",
+                  "border border-[var(--color-border-strong)] bg-[var(--color-surface)]",
+                  "type-small font-medium text-[var(--color-text)]",
+                  "hover:bg-[var(--color-hover)] transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus-ring)] focus-visible:ring-offset-2",
+                ].join(" ")}
               >
-                Return to Retail Stock
+                Back to retail stock
               </Link>
             </div>
           </div>
