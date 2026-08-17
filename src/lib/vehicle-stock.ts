@@ -17,7 +17,11 @@ export function isTradeVehicle(vehicle: Vehicle): boolean {
   return getVehicleStatus(vehicle) === "trade";
 }
 
-/** Retail stock query — excludes trade vehicles */
+export function isRentVehicle(vehicle: Vehicle): boolean {
+  return getVehicleStatus(vehicle) === "rent";
+}
+
+/** Retail stock query — excludes trade and rent vehicles */
 export function getRetailStock(vehicles: Vehicle[]): Vehicle[] {
   return vehicles.filter(isRetailVehicle);
 }
@@ -25,6 +29,11 @@ export function getRetailStock(vehicles: Vehicle[]): Vehicle[] {
 /** Trade stock query — trade vehicles only */
 export function getTradeStock(vehicles: Vehicle[]): Vehicle[] {
   return vehicles.filter(isTradeVehicle);
+}
+
+/** Rent stock query — hire vehicles only */
+export function getRentStock(vehicles: Vehicle[]): Vehicle[] {
+  return vehicles.filter(isRentVehicle);
 }
 
 /**
@@ -35,7 +44,7 @@ export function filterByStockType(
   vehicles: Vehicle[],
   stockType: StockType,
 ): Vehicle[] {
-  return stockType === "trade"
-    ? getTradeStock(vehicles)
-    : getRetailStock(vehicles);
+  if (stockType === "trade") return getTradeStock(vehicles);
+  if (stockType === "rent") return getRentStock(vehicles);
+  return getRetailStock(vehicles);
 }

@@ -13,6 +13,7 @@ import { useSiteAppointment } from "@/components/site/SiteAppointmentProvider";
 const NAV_LINKS = [
   { href: "/",        label: "Home"    },
   { href: "/search",  label: "Stock"   },
+  { href: "/rent",    label: "Rent"    },
   { href: "/contact", label: "Contact" },
 ];
 

@@ -20,7 +20,7 @@ export type SortOption =
   | "year-desc"
   | "mot-desc";
 
-export type VehicleStatus = "retail" | "trade";
+export type VehicleStatus = "retail" | "trade" | "rent";
 
 export const DEFAULT_SORT: SortOption = "price-asc";
 
@@ -133,6 +133,8 @@ export interface Vehicle {
   registration?: string;
   engineCC: number;
   price: number;
+  /** Weekly hire rate — rent stock only */
+  weeklyRent?: number;
   description: string;
   images: string[];           // paths or placeholder refs
   /** Meaningful alt text per image — falls back to generated labels */

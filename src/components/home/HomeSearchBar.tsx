@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Search, ChevronDown, Tag, Calendar, Gauge, Car, HelpCircle, Shield, CirclePoundSterling } from "lucide-react";
 import type { BodyType, FilterState, Vehicle } from "@/lib/types";
 import { getMakes, getModelsForMake, filtersToParams } from "@/lib/filters";
@@ -127,6 +127,7 @@ export function HomeSearchBar({
 }: HomeSearchBarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const [keyword, setKeyword] = useState(initialFilters?.query ?? "");
   const [make, setMake] = useState(initialFilters?.make[0] ?? "");
@@ -255,6 +256,17 @@ export function HomeSearchBar({
               {label}
             </button>
           ))}
+          <Link
+            href="/rent"
+            className={[
+              "h-9 px-4 inline-flex items-center rounded-[var(--radius-pill)] text-sm font-medium transition-colors",
+              pathname === "/rent"
+                ? "bg-[var(--color-accent)] text-white"
+                : "bg-[var(--color-surface-2)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface-3)]",
+            ].join(" ")}
+          >
+            Cars to rent
+          </Link>
           <Link
             href="/contact"
             className="basis-full sm:basis-auto sm:ml-auto inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors shrink-0"

@@ -26,6 +26,13 @@ export function buildVehicleWhatsAppHref(context: VehicleWhatsAppContext): strin
   return buildWhatsAppHref(buildVehicleWhatsAppMessage(context));
 }
 
+/** Prefilled WhatsApp message for weekly hire enquiries */
+export function buildHireWhatsAppHref(): string {
+  return buildWhatsAppHref(
+    "Hi, I'm interested in weekly car hire. Can you tell me what's available?",
+  );
+}
+
 export function buildGoogleMapsDirectionsHref(): string {
   const query = encodeURIComponent(
     `${SITE_CONTACT.addressLine1}, ${SITE_CONTACT.addressLine2}`,

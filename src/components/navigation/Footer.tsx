@@ -8,6 +8,7 @@ import { OPENING_HOURS, SITE_CONTACT } from "@/lib/site-contact";
 const PRIMARY_NAV = [
   { href: "/",        label: "Home"    },
   { href: "/search",  label: "Stock"   },
+  { href: "/rent",    label: "Weekly car hire" },
   { href: "/contact", label: "Contact" },
 ];
 

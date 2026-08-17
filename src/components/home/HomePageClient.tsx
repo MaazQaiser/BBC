@@ -16,6 +16,7 @@ import { SearchHeroSection } from "@/components/home/SearchHeroSection";
 import { HeroSearchOverlay } from "@/components/home/HeroSearchOverlay";
 import { CategoryCards } from "@/components/home/CategoryCards";
 import { StockGridSection } from "@/components/home/StockGridSection";
+import { RentPreviewSection } from "@/components/home/RentPreviewSection";
 import { VehicleTypeCards } from "@/components/home/VehicleTypeCards";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { TrustedListingsSection } from "@/components/home/TrustedListingsSection";
@@ -147,6 +148,8 @@ function HomePageInner({ vehicles }: HomePageClientProps) {
       ) : (
         <StockGridSection vehicles={previewStock} limit={6} />
       )}
+
+      <RentPreviewSection />
 
       <VehicleTypeCards />
       <WhyChooseUs />
