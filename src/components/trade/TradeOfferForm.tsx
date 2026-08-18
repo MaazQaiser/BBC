@@ -1,47 +1,58 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { CheckCircle2, Send } from "lucide-react";
 import { Button } from "@/components/buttons/Button";
 import { TextField } from "@/components/forms/TextField";
-import type { TradeSession } from "@/lib/trade-session";
 
 interface FieldErrors {
-  contactName?: string;
-  phone?:       string;
-  email?:       string;
+  contactName?:  string;
+  companyName?:  string;
+  phone?:        string;
+  email?:        string;
+  offerAmount?:  string;
 }
 
-export interface TradeEnquiryFormProps {
+export interface TradeOfferFormProps {
   vehicleId:      string;
   vehicleTitle:   string;
   registration:   string;
-  tradeSession:   TradeSession;
+  askingPrice:    number;
 }
 
-export function TradeEnquiryForm({
+export function TradeOfferForm({
   vehicleId,
   vehicleTitle,
   registration,
-  tradeSession,
-}: TradeEnquiryFormProps) {
-  const [contactName, setContactName] = useState("");
-  const [phone, setPhone]             = useState("");
-  const [email, setEmail]             = useState("");
-  const [message, setMessage]         = useState("");
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const [formError, setFormError]     = useState<string | null>(null);
-  const [loading, setLoading]         = useState(false);
-  const [submitted, setSubmitted]     = useState(false);
+  askingPrice,
+}: TradeOfferFormProps) {
+  const [contactName, setContactName]   = useState("");
+  const [companyName, setCompanyName]   = useState("");
+  const [phone, setPhone]               = useState("");
+  const [email, setEmail]               = useState("");
+  const [offerAmount, setOfferAmount]   = useState("");
+  const [message, setMessage]           = useState("");
+  const [fieldErrors, setFieldErrors]   = useState<FieldErrors>({});
+  const [formError, setFormError]       = useState<string | null>(null);
+  const [loading, setLoading]           = useState(false);
+  const [submitted, setSubmitted]       = useState(false);
 
   function validate(): FieldErrors {
     const errors: FieldErrors = {};
-    if (!contactName.trim()) errors.contactName = "Contact name is required.";
-    if (!phone.trim())       errors.phone = "Phone number is required.";
+    if (!contactName.trim()) errors.contactName = "Name is required.";
+    if (!companyName.trim()) errors.companyName = "Company name is required.";
+    if (!phone.trim())       errors.phone = "Mobile number is required.";
     if (!email.trim()) {
       errors.email = "Email address is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       errors.email = "Enter a valid email address.";
+    }
+    const amount = Number(offerAmount.replace(/[,£\s]/g, ""));
+    if (!offerAmount.trim()) {
+      errors.offerAmount = "Offer amount is required.";
+    } else if (!Number.isFinite(amount) || amount <= 0) {
+      errors.offerAmount = "Enter a valid offer amount.";
     }
     return errors;
   }
@@ -54,6 +65,8 @@ export function TradeEnquiryForm({
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
+    const amount = Number(offerAmount.replace(/[,£\s]/g, ""));
+
     setLoading(true);
     try {
       const response = await fetch("/api/trade/enquiry", {
@@ -62,8 +75,10 @@ export function TradeEnquiryForm({
         body:    JSON.stringify({
           vehicleId,
           contactName,
+          companyName,
           phone,
           email,
+          offerAmount: amount,
           message,
         }),
       });
@@ -71,13 +86,13 @@ export function TradeEnquiryForm({
       const data = (await response.json()) as { error?: string };
 
       if (!response.ok) {
-        setFormError(data.error ?? "Failed to send enquiry. Please try again.");
+        setFormError(data.error ?? "Failed to send offer. Please try again.");
         return;
       }
 
       setSubmitted(true);
     } catch {
-      setFormError("Failed to send enquiry. Please try again.");
+      setFormError("Failed to send offer. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -89,12 +104,18 @@ export function TradeEnquiryForm({
         <div className="flex items-start gap-3">
           <CheckCircle2 size={22} className="shrink-0 text-[var(--color-accent)] mt-0.5" aria-hidden="true" />
           <div>
-            <h2 className="type-h4 text-[var(--color-text)] mb-2">Enquiry sent</h2>
-            <p className="type-small text-[var(--color-text-muted)]">
-              Your trade enquiry for{" "}
+            <h2 className="type-h4 text-[var(--color-text)] mb-2">Offer sent</h2>
+            <p className="type-small text-[var(--color-text-muted)] leading-relaxed mb-4">
+              Thanks — we&apos;ll review your offer on{" "}
               <strong className="text-[var(--color-text)]">{vehicleTitle}</strong>{" "}
-              ({registration}) has been submitted. We&apos;ll be in touch shortly.
+              ({registration}). Proof of motor trade status is required before purchase.
             </p>
+            <Link
+              href="/trade/verify"
+              className="type-small font-medium text-[var(--color-accent)] hover:underline"
+            >
+              Read what we accept as trade verification →
+            </Link>
           </div>
         </div>
       </div>
@@ -103,22 +124,15 @@ export function TradeEnquiryForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-      <TextField
-        label="Business name"
-        value={tradeSession.businessName}
-        readOnly
-        disabled
-      />
+      <p className="type-small text-[var(--color-text-muted)]">
+        Asking price{" "}
+        <span className="num font-semibold text-[var(--color-text)]">
+          £{askingPrice.toLocaleString("en-GB")}
+        </span>
+      </p>
 
       <TextField
-        label="Company number or VAT number"
-        value={tradeSession.companyNumber}
-        readOnly
-        disabled
-      />
-
-      <TextField
-        label="Contact Name"
+        label="Name"
         value={contactName}
         onChange={(e) => {
           setContactName(e.target.value);
@@ -131,7 +145,20 @@ export function TradeEnquiryForm({
       />
 
       <TextField
-        label="Phone Number"
+        label="Company name"
+        value={companyName}
+        onChange={(e) => {
+          setCompanyName(e.target.value);
+          if (fieldErrors.companyName) {
+            setFieldErrors((prev) => ({ ...prev, companyName: undefined }));
+          }
+        }}
+        error={fieldErrors.companyName}
+        autoComplete="organization"
+      />
+
+      <TextField
+        label="Mobile"
         type="tel"
         value={phone}
         onChange={(e) => {
@@ -145,7 +172,7 @@ export function TradeEnquiryForm({
       />
 
       <TextField
-        label="Email Address"
+        label="Email"
         type="email"
         value={email}
         onChange={(e) => {
@@ -158,16 +185,30 @@ export function TradeEnquiryForm({
         autoComplete="email"
       />
 
+      <TextField
+        label="Offer amount (£)"
+        inputMode="decimal"
+        value={offerAmount}
+        onChange={(e) => {
+          setOfferAmount(e.target.value);
+          if (fieldErrors.offerAmount) {
+            setFieldErrors((prev) => ({ ...prev, offerAmount: undefined }));
+          }
+        }}
+        error={fieldErrors.offerAmount}
+        placeholder="e.g. 2500"
+      />
+
       <div>
         <label htmlFor="trade-message" className="block type-small font-medium text-[var(--color-text)] mb-1.5">
-          Message
+          Message <span className="text-[var(--color-text-faint)] font-normal">(optional)</span>
         </label>
         <textarea
           id="trade-message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           rows={4}
-          placeholder="Any questions or notes about this vehicle…"
+          placeholder="Collection notes or questions about this vehicle…"
           className="w-full px-4 py-3 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-white text-[var(--color-text)] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)] transition-colors resize-y min-h-[100px]"
         />
       </div>
@@ -177,7 +218,7 @@ export function TradeEnquiryForm({
       )}
 
       <Button type="submit" loading={loading} leftIcon={<Send size={16} />}>
-        Send Enquiry
+        Submit offer
       </Button>
     </form>
   );

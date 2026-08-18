@@ -11,6 +11,12 @@ export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "mot-desc",    label: "MOT remaining longest" },
 ];
 
+/** Trade listing — price only */
+export const TRADE_SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "price-asc",  label: "Price: Low to High" },
+  { value: "price-desc", label: "Price: High to Low" },
+];
+
 export function getSortLabel(sort: SortOption): string {
   return SORT_OPTIONS.find((o) => o.value === sort)?.label ?? "Price low to high";
 }

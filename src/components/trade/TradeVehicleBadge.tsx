@@ -5,7 +5,7 @@ import { Badge, type BadgeSize } from "@/components/badges/Badge";
 export function TradeVehicleBadge({ size = "md" }: { size?: BadgeSize }) {
   return (
     <Badge variant="trade" size={size} icon={<Tag size={10} />}>
-      Trade Vehicle
+      TRADE SALE
     </Badge>
   );
 }

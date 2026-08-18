@@ -24,11 +24,15 @@ export type VehicleStatus = "retail" | "trade" | "rent";
 
 export const DEFAULT_SORT: SortOption = "price-asc";
 
+export type FaultCategory = "cosmetic" | "mechanical" | "warning-light" | "missing";
+
 export interface ConditionItem {
   id:          string;
   /** Short fault title — e.g. "Dent to rear passenger door" */
   title:       string;
   severity:    FaultSeverity;
+  /** Trade grouping — cosmetic, mechanical, warning lights, missing items */
+  faultCategory?: FaultCategory;
   /** Fault photograph — required for published vehicles */
   photo:       string;
   /** Meaningful alt text describing the fault */

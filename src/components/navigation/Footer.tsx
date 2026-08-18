@@ -6,10 +6,11 @@ import { SITE_NAME } from "@/lib/site-brand";
 import { OPENING_HOURS, SITE_CONTACT } from "@/lib/site-contact";
 
 const PRIMARY_NAV = [
-  { href: "/",        label: "Home"    },
-  { href: "/search",  label: "Stock"   },
-  { href: "/rent",    label: "Weekly car hire" },
-  { href: "/contact", label: "Contact" },
+  { href: "/",              label: "Home"           },
+  { href: "/search",        label: "Stock"          },
+  { href: "/rent",          label: "Weekly car hire" },
+  { href: "/trade/listing", label: "Cars to Trade"  },
+  { href: "/contact",       label: "Contact"        },
 ];
 
 export function Footer({ className = "" }: { className?: string }) {
@@ -44,14 +45,6 @@ export function Footer({ className = "" }: { className?: string }) {
                   </Link>
                 </li>
               ))}
-              <li className="pt-2 mt-2 border-t border-white/10">
-                <Link
-                  href="/trade"
-                  className="text-sm text-white/45 hover:text-white/70 transition-colors"
-                >
-                  Trade Vehicles
-                </Link>
-              </li>
             </ul>
           </div>
 

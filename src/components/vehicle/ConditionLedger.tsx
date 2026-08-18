@@ -73,7 +73,7 @@ export function ConditionLedger({ items, embedded = false }: ConditionLedgerProp
   );
 }
 
-function ConditionLedgerFault({ item }: { item: ConditionItem }) {
+export function ConditionLedgerFault({ item }: { item: ConditionItem }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const title = getFaultTitle(item);
   const qualifiers = getFaultQualifiers(item);

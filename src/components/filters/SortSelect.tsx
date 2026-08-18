@@ -8,10 +8,16 @@ interface SortSelectProps {
   value: SortOption;
   onChange: (sort: SortOption) => void;
   className?: string;
+  options?: { value: SortOption; label: string }[];
 }
 
-export function SortSelect({ value, onChange, className = "" }: SortSelectProps) {
-  const selected = SORT_OPTIONS.find((o) => o.value === value);
+export function SortSelect({
+  value,
+  onChange,
+  className = "",
+  options = SORT_OPTIONS,
+}: SortSelectProps) {
+  const selected = options.find((o) => o.value === value);
 
   return (
     <div className={["relative inline-flex items-center w-full sm:w-auto min-w-0", className].join(" ")}>
@@ -24,7 +30,7 @@ export function SortSelect({ value, onChange, className = "" }: SortSelectProps)
         onChange={(e) => onChange(e.target.value as SortOption)}
         className="appearance-none h-10 w-full sm:w-auto max-w-full pl-3 pr-9 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-white text-sm font-medium text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] cursor-pointer"
       >
-        {SORT_OPTIONS.map((opt) => (
+        {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>

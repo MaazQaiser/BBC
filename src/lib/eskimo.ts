@@ -2,15 +2,16 @@ import type { ConditionItem } from "@/lib/types";
 
 export interface EskimoTradeEnquiryPayload {
   businessName:        string;
-  companyNumber:       string;
+  companyNumber?:      string;
   contactName:         string;
   phone:               string;
   email:               string;
+  offerAmount:         number;
   vehicleRegistration: string;
   vehicleId:           string;
   vehicleTitle:        string;
   tradeStatus:         true;
-  gateTimestamp:       string;
+  gateTimestamp?:      string;
   gateIpAddress?:      string;
   businessConfirmed:   boolean;
   timestamp:           string;

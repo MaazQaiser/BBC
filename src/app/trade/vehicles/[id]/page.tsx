@@ -12,8 +12,7 @@ import { VehicleDetailContent } from "@/components/vehicle/VehicleDetailContent"
 import { VehicleContactProvider } from "@/components/vehicle/VehicleContactContext";
 import { StickyContactPanel } from "@/components/vehicle/StickyContactPanel";
 import { VehicleDetailSection } from "@/components/vehicle/VehicleDetailSection";
-import { TradeVehicleEnquirySection } from "@/components/trade/TradeVehicleEnquirySection";
-import { getTradeSession } from "@/lib/trade-session-server";
+import { TradeDetailActions } from "@/components/trade/TradeDetailActions";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -38,12 +37,9 @@ export default async function TradeVehicleDetailPage({ params }: PageProps) {
   const vehicle = getTradeVehicleById(id);
   if (!vehicle) notFound();
 
-  const tradeSession = await getTradeSession();
-  if (!tradeSession) notFound();
-
   const title = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const pageUrl = await getVehiclePageUrl(vehicle.id, `/trade/vehicles`);
-  const enquiryHref = `/trade/vehicles/${vehicle.id}/enquiry`;
+  const offerHref = `/trade/vehicles/${vehicle.id}/offer`;
 
   return (
     <>
@@ -56,34 +52,45 @@ export default async function TradeVehicleDetailPage({ params }: PageProps) {
       >
         <main className="flex-1 pb-32 lg:pb-12 bg-[var(--color-surface-2)]">
           <Container width="page" className="py-6 md:py-8">
-            <div className="flex items-center gap-3 mb-6 md:mb-8 flex-wrap">
+            <div className="flex flex-col gap-4 mb-6 md:mb-8">
               <Link
                 href="/trade/listing"
-                className="inline-flex items-center gap-1.5 type-small text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
+                className="inline-flex items-center gap-1.5 type-small text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors self-start"
               >
-                <ArrowLeft size={14} aria-hidden="true" /> Back to trade stock
+                <ArrowLeft size={14} aria-hidden="true" /> Back to trade clearance
               </Link>
+
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text)]">
+                  Trade Clearance · For Motor Trade Buyers Only
+                </p>
+                <p className="text-xs text-[var(--color-text-muted)] mt-1">
+                  Sold on a trade basis. Not prepared for retail sale and may not be roadworthy.
+                </p>
+              </div>
             </div>
 
             <div className="space-y-5">
-              <VehicleDetailContent vehicle={vehicle} hideContactSection />
+              <VehicleDetailContent vehicle={vehicle} hideContactSection tradeMode />
 
               <VehicleDetailSection
-                id="trade-enquiry"
-                title="Trade enquiry"
-                description={`Send an enquiry about ${title}. Your business information from the trade gate will be included with the request.`}
+                id="trade-actions"
+                title="Trade actions"
+                description="Make an offer, book a viewing, or WhatsApp us. Proof of motor trade status is required before purchase."
                 className="hidden lg:block"
               >
-                <TradeVehicleEnquirySection
-                  enquiryHref={enquiryHref}
+                <TradeDetailActions
+                  vehicleId={vehicle.id}
                   vehicleTitle={title}
+                  registration={vehicle.registration}
+                  pageUrl={pageUrl}
                 />
               </VehicleDetailSection>
             </div>
           </Container>
         </main>
 
-        <StickyContactPanel isTrade enquiryHref={enquiryHref} />
+        <StickyContactPanel isTrade offerHref={offerHref} />
       </VehicleContactProvider>
       <Footer className="pb-[calc(var(--sticky-bar-height)+env(safe-area-inset-bottom)+0.75rem)] lg:pb-0" />
     </>

@@ -11,10 +11,11 @@ import { SITE_CONTACT } from "@/lib/site-contact";
 import { useSiteAppointment } from "@/components/site/SiteAppointmentProvider";
 
 const NAV_LINKS = [
-  { href: "/",        label: "Home"    },
-  { href: "/search",  label: "Stock"   },
-  { href: "/rent",    label: "Rent"    },
-  { href: "/contact", label: "Contact" },
+  { href: "/",              label: "Home"           },
+  { href: "/search",        label: "Stock"          },
+  { href: "/rent",          label: "Rent"           },
+  { href: "/trade/listing", label: "Cars to Trade"  },
+  { href: "/contact",       label: "Contact"        },
 ];
 
 interface NavbarProps {
@@ -36,6 +37,9 @@ export function Navbar({ variant = "solid" }: NavbarProps) {
     if (href === "/") return pathname === "/";
     if (href === "/search") {
       return pathname === "/search" || pathname.startsWith("/vehicles/");
+    }
+    if (href === "/trade/listing") {
+      return pathname === "/trade" || pathname.startsWith("/trade/");
     }
     return pathname === href || pathname.startsWith(`${href}/`);
   }
@@ -176,16 +180,6 @@ export function Navbar({ variant = "solid" }: NavbarProps) {
                   </Link>
                 ))}
               </nav>
-
-              <div className="mt-3 pt-3 border-t border-white/10">
-                <Link
-                  href="/trade"
-                  onClick={() => setOpen(false)}
-                  className="flex items-center h-10 text-sm font-medium text-white/55 hover:text-white/80 px-1 transition-colors"
-                >
-                  Trade Vehicles
-                </Link>
-              </div>
 
               <div className="pt-4 mt-4 flex flex-col gap-3 border-t border-white/10 min-w-0">
                 <button

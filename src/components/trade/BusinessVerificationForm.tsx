@@ -84,7 +84,7 @@ export function BusinessVerificationForm() {
     return (
       <div>
         <p className="type-label text-[var(--color-text-muted)] mb-2">
-          Trade vehicles
+          Trade Clearance
         </p>
         <div className="flex items-start gap-3 mb-4">
           <CheckCircle2
@@ -97,8 +97,9 @@ export function BusinessVerificationForm() {
           </h1>
         </div>
         <p className="type-body text-[var(--color-text-muted)] mb-8 leading-relaxed">
-          You can now view trade stock. These vehicles are sold for spares,
-          repair or resale and may not be roadworthy.
+          Your business details have been recorded. We still require proof of
+          motor trade status before purchase. You can keep browsing trade clearance
+          in the meantime.
         </p>
 
         <dl className="border-t border-[var(--color-border)] mb-8">
@@ -132,7 +133,7 @@ export function BusinessVerificationForm() {
             rightIcon={<ArrowRight size={16} />}
             className="sm:flex-1"
           >
-            View trade vehicles
+            View trade clearance
           </Button>
           <Link
             href="/search"
@@ -155,14 +156,15 @@ export function BusinessVerificationForm() {
   return (
     <>
       <p className="type-label text-[var(--color-text-muted)] mb-2">
-        Trade vehicles
+        Trade Clearance
       </p>
       <h1 className="type-h2 text-[var(--color-text)] mb-3">
-        Business information
+        Optional pre-registration
       </h1>
       <p className="type-body text-[var(--color-text-muted)] mb-8 leading-relaxed">
-        Enter your business details before viewing trade stock. Trade
-        vehicles are sold for spares, repair or resale.
+        Leave your business details so we can match you to an offer. This is
+        not required to browse stock. Trade vehicles are sold for spares,
+        repair or resale.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>

@@ -17,9 +17,9 @@ const OFFERS = [
     image: VEHICLE_IMAGES.car01,
   },
   {
-    title: "Trade vehicles",
-    meta:  "Trade listings with declared faults",
-    href:  "/trade",
+    title: "Cars to Trade",
+    meta:  "Trade clearance — motor trade buyers only",
+    href:  "/trade/listing",
     image: VEHICLE_IMAGES.car06,
   },
   {
